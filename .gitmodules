@@ -10,3 +10,6 @@
 [submodule "deepseek-harness-harmony"]
 	path = deepseek-harness-harmony
 	url = https://github.com/fellow99/deepseek-harness-harmony.git
+[submodule "harmonypc-electron"]
+	path = harmonypc-electron
+	url = https://atomgit.com/jianguoxu/harmonypc-electron.git
