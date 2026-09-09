@@ -12,7 +12,7 @@
 	url = https://github.com/fellow99/deepseek-harness-harmony.git
 [submodule "harmonypc-electron"]
 	path = harmonypc-electron
-	url = https://atomgit.com/jianguoxu/harmonypc-electron.git
+	url = https://github.com/fellow99/harmonypc-electron.git
 [submodule "deepseek-harness-desktop-website"]
 	path = deepseek-harness-desktop-website
 	url = https://github.com/fellow99/deepseek-harness-desktop-website.git
