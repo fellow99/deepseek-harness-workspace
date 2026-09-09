@@ -85,6 +85,21 @@
 - TC-001~TC-010 全部通过。
 - TC-101~TC-102 按预期降级/失败，无崩溃。
 
-## 5. 实测结果
+## 5. 实测结果（2026-09-09）
 
-> 待测试阶段填写。
+> 详细报告见 `logs/20260909-1/TEST_REPORT.md`。
+
+| 用例 | 结果 | 备注 |
+|------|------|------|
+| TC-001 desktop 物料就位 | ✅ | resources/ 含 icon.ico/icns/png + tray.png |
+| TC-002 desktop 打包图标 | ⚠️ | `npm run package` 卡于 electron headers 网络下载（ECONNRESET），环境问题 |
+| TC-003 desktop 窗口图标 | ⚠️ | 受 TC-002 阻塞 |
+| TC-004 desktop 托盘图标 | ⚠️ | 受 TC-002 阻塞 |
+| TC-005 harmony 物料就位 | ✅ | 1024×1024 logo 覆盖 app_icon/startIcon |
+| TC-006 harmony OS 桌面名 | ⚠️ | HAP 编译+签名通过；真机 Offline 未部署 |
+| TC-007 harmony 应用图标 | ⚠️ | 同上 |
+| TC-008 harmony in-app 标题 | ✅ | 源码级验证，编译通过 |
+| TC-009 website favicon | ✅ | 已添加 |
+| TC-010 website wordmark | ✅ | 已替换为 logo 图 |
+
+**说明**：代码改动已由 `tsc --noEmit`（desktop）、`hvigorw assembleHap`（harmony，BUILD SUCCESSFUL）、代码评审（Critical 已修复）三重验证。两项 ⚠️ 均为环境阻塞（网络下载 / 真机 USB 调试未授权），非代码缺陷，修复命令见 TEST_REPORT。
