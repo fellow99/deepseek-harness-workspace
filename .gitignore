@@ -28,6 +28,7 @@ yarn-error.log*
 
 /dist
 /harmonypc-electron-versions
+/_test
 
 .sisyphus
 .opencode
