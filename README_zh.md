@@ -42,6 +42,17 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 | `deepseek-harness-desktop-website` | 两个封装工程的产品官网 | — |
 | `harmonypc-electron-versions` | Electron-on-HarmonyOS 发行版归档（v34/v37/v40）+ 用于重编译原生模块（如 `better-sqlite3`）的 Node 头文件指南 | harmony 工具链 |
 
+### 当前版本
+
+| 工程 | 版本 | 对应 dsh 版本 |
+|---|---|---|
+| `deepseek-harness-desktop` | **0.1.2** | `dsh-v0.1.2-rc.1` |
+| `deepseek-harness-harmony` | **0.1.2** | `dsh-v0.1.2-rc.1` |
+| `deepseek-harness`（submodule 固定版本） | — | `dsh-v0.1.2-rc.1` |
+
+两个封装工程固定同一个上游 dsh tag，各工程构建脚本据此选择 `patches/dsh-v0.1.2-rc.1/`。任一工程升级时，
+请同步更新本表与两个产品 README。
+
 ## 共享架构
 
 `dsh` 已完成 **Host/Client 拆分**，其 Web 服务器**同时托管 SPA dist 与 `/api`**。因此两个封装工程采用相同的**进程内 Host + webserver + 同源数据面**方案：

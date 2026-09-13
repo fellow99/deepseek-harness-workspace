@@ -42,6 +42,17 @@ deepseek-harness-workspace/            # this repo — submodule container
 | `deepseek-harness-desktop-website` | Product website of the two wrappers | — |
 | `harmonypc-electron-versions` | Electron-on-HarmonyOS release archives (v34/v37/v40) + Node-header guides for rebuilding native modules like `better-sqlite3` | harmony tooling |
 
+### Current versions
+
+| Project | Version | dsh version |
+|---|---|---|
+| `deepseek-harness-desktop` | **0.1.2** | `dsh-v0.1.2-rc.1` |
+| `deepseek-harness-harmony` | **0.1.2** | `dsh-v0.1.2-rc.1` |
+| `deepseek-harness` (submodule pin) | — | `dsh-v0.1.2-rc.1` |
+
+Both wrappers pin the same upstream dsh tag, which selects `patches/dsh-v0.1.2-rc.1/` in each project's
+build script. When either wrapper advances, update this table together with the two product READMEs.
+
 ## Shared architecture
 
 `dsh` has completed its **Host/Client split**, and its webserver **serves both the SPA dist and `/api`**. Both wrappers therefore use the same **in-process Host + webserver + same-origin data plane**:
