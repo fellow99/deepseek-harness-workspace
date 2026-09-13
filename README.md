@@ -46,11 +46,11 @@ deepseek-harness-workspace/            # this repo — submodule container
 
 | Project | Version | dsh version |
 |---|---|---|
-| `deepseek-harness-desktop` | **0.1.2** | `dsh-v0.1.2-rc.1` |
-| `deepseek-harness-harmony` | **0.1.2** | `dsh-v0.1.2-rc.1` |
-| `deepseek-harness` (submodule pin) | — | `dsh-v0.1.2-rc.1` |
+| `deepseek-harness-desktop` | **0.1.5** | `dsh-v0.1.5-rc.2` |
+| `deepseek-harness-harmony` | **0.1.5** | `dsh-v0.1.5-rc.2` |
+| `deepseek-harness` (submodule pin) | — | `dsh-v0.1.5-rc.2` |
 
-Both wrappers pin the same upstream dsh tag, which selects `patches/dsh-v0.1.2-rc.1/` in each project's
+Both wrappers pin the same upstream dsh tag, which selects `patches/dsh-v0.1.5-rc.2/` in each project's
 build script. When either wrapper advances, update this table together with the two product READMEs.
 
 ## Shared architecture
@@ -67,8 +67,8 @@ build script. When either wrapper advances, update this table together with the 
 |---|---|---|
 | Target platforms | Windows + Linux (macOS later) | HarmonyOS 2in1 / tablet (HAP) |
 | Webserver binding | `127.0.0.1:<free port>` | `0.0.0.0:<free port>` + renderer connects via LAN IP with `Host`/`Origin` rewrite (HarmonyOS NEXT loopback network isolation) |
-| dsh patches | 2 (disable HMR, disable native picker) | 4 (shared 2 + symlink→`cpSync` copy, allow-all-interfaces) |
-| MVP capabilities | Scaffold + dsh consumption complete; tray / notifications / frameless window / clipboard image paste (see README for live status) | Verified on device — HarmonyOS 6.1.0.135 (API 24); Web UI fully functional; session persistence + plugin marketplace in; terminal / process sandbox out (aarch64 artifacts missing) |
+| dsh patches | 2 (disable HMR, disable native picker) | 5 (shared 2 + symlink→`cpSync` copy, allow-all-interfaces, flock openharmony stub) |
+| MVP capabilities | Scaffold + dsh consumption complete; tray / notifications / native title bar / clipboard image paste (see README for live status) | Verified on device — HarmonyOS 6.1.0.135 (API 24); Web UI fully functional; session persistence + plugin marketplace in; terminal / process sandbox out (aarch64 artifacts missing) |
 
 ## Getting started
 

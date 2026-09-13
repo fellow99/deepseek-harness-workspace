@@ -46,11 +46,11 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 
 | 工程 | 版本 | 对应 dsh 版本 |
 |---|---|---|
-| `deepseek-harness-desktop` | **0.1.2** | `dsh-v0.1.2-rc.1` |
-| `deepseek-harness-harmony` | **0.1.2** | `dsh-v0.1.2-rc.1` |
-| `deepseek-harness`（submodule 固定版本） | — | `dsh-v0.1.2-rc.1` |
+| `deepseek-harness-desktop` | **0.1.5** | `dsh-v0.1.5-rc.2` |
+| `deepseek-harness-harmony` | **0.1.5** | `dsh-v0.1.5-rc.2` |
+| `deepseek-harness`（submodule 固定版本） | — | `dsh-v0.1.5-rc.2` |
 
-两个封装工程固定同一个上游 dsh tag，各工程构建脚本据此选择 `patches/dsh-v0.1.2-rc.1/`。任一工程升级时，
+两个封装工程固定同一个上游 dsh tag，各工程构建脚本据此选择 `patches/dsh-v0.1.5-rc.2/`。任一工程升级时，
 请同步更新本表与两个产品 README。
 
 ## 共享架构
@@ -67,8 +67,8 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 |---|---|---|
 | 目标平台 | Windows + Linux（macOS 后续） | HarmonyOS 2in1 / 平板（HAP） |
 | Web 服务器绑定 | `127.0.0.1:<随机端口>` | `0.0.0.0:<随机端口>`，渲染进程经局域网 IP 连接并改写 `Host`/`Origin`（HarmonyOS NEXT 回环网络隔离） |
-| dsh 补丁 | 2 个（禁用 HMR、禁用原生目录选择器） | 4 个（共享的 2 个 + 符号链接→`cpSync` 拷贝、放行全接口绑定） |
-| MVP 能力 | 脚手架与 dsh 消费已完成；托盘 / 通知 / 无边框窗口 / 剪贴板图片粘贴（实时状态见其 README） | 已在真机验证 —— HarmonyOS 6.1.0.135（API 24）；Web UI 全功能可用；会话持久化与插件市场已内置；终端 / 进程沙箱暂缺（aarch64 构件缺失） |
+| dsh 补丁 | 2 个（禁用 HMR、禁用原生目录选择器） | 5 个（共享的 2 个 + 符号链接→`cpSync` 拷贝、放行全接口绑定、flock openharmony 放行） |
+| MVP 能力 | 脚手架与 dsh 消费已完成；托盘 / 通知 / 常规标题栏 / 剪贴板图片粘贴（实时状态见其 README） | 已在真机验证 —— HarmonyOS 6.1.0.135（API 24）；Web UI 全功能可用；会话持久化与插件市场已内置；终端 / 进程沙箱暂缺（aarch64 构件缺失） |
 
 ## 快速开始
 
