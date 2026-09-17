@@ -26,6 +26,7 @@ deepseek-harness-workspace/            # this repo — submodule container
 ├── deepseek-harness/                  # [submodule] dsh — the wrapped agent host (upstream)
 ├── dsh-market/                        # [submodule] visual plugin marketplace (npm pkg "dshmarket")
 ├── dsh-plugins/                       # (plain dir) generic, shareable dsh plugins — one dir per plugin, named dsh-plugin-XXX
+├── skills/                            # (plain dir) generic, shareable dsh tool skills — one dir per skill, kebab-case name
 ├── harmonypc-electron/                # [submodule] Electron-on-HarmonyOS runtime (Electron 37 / Node 22.17.0)
 ├── deepseek-harness-desktop-website/  # [submodule] website of the two wrappers
 └── harmonypc-electron-versions/       # (plain dir, not a submodule) runtime release archives + Electron header guides
@@ -40,6 +41,7 @@ deepseek-harness-workspace/            # this repo — submodule container
 | `deepseek-harness` | The wrapped agent host (`dsh`, upstream source reference) | both wrappers |
 | `dsh-market` | Built-in visual plugin marketplace | both wrappers |
 | `dsh-plugins` | **Generic, shareable** dsh plugins — one directory per plugin, named `dsh-plugin-XXX`. Currently empty but for its own README (see [`dsh-plugins/README.md`](dsh-plugins/README.md)); wrapper-specific plugins live inside their wrapper | any wrapper |
+| `skills` | **Generic, shareable** dsh tool skills — one directory per skill, kebab-case name. Currently empty but for its own README (see [`skills/README.md`](skills/README.md)); wrapper-specific skills live inside their wrapper | any wrapper |
 | `harmonypc-electron` | Electron-on-HarmonyOS runtime (native SOs + ArkTS bridge) | harmony only |
 | `deepseek-harness-desktop-website` | Product website of the two wrappers | — |
 | `harmonypc-electron-versions` | Electron-on-HarmonyOS release archives (v34/v37/v40) + Node-header guides for rebuilding native modules like `better-sqlite3` | harmony tooling |
@@ -58,6 +60,25 @@ In both tiers the directory name is also the package `name` (a bare, unscoped na
 Plugins are plain ESM (`lib/index.js`, no build step). Each consuming wrapper materializes the plugins it wants into its own shipped `dsh-dist/node_modules/` at collect time, then mounts them from an agent-preset row.
 
 > The only plugin written so far — the `delete`/`move` file tools — is **wrapper-specific**: it needs the harmony wrapper's `dsh-fs-remove-primitive` patch for `ctx.fs.remove`, so it lives at [`deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/`](deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/). That is also why `dsh-plugins/` is currently empty but for its own README. See [`dsh-plugins/README.md`](dsh-plugins/README.md) and [`deepseek-harness-harmony/plugins/README.md`](deepseek-harness-harmony/plugins/README.md).
+
+### Skill convention
+
+Tool skills follow the same **two-tier split** as plugins:
+
+| Location | Tier | Consumed by |
+|---|---|---|
+| `skills/` (this workspace) | **Generic / shareable** — applies to any dsh shell | any wrapper |
+| `<wrapper>/skills/` (e.g. [`deepseek-harness-harmony/skills/`](deepseek-harness-harmony/skills/)) | **Wrapper-specific** — describes that wrapper's own runtime (sandbox, packaging paths, capability gaps) | that wrapper only |
+
+Unlike plugins, **skill names carry no prefix**: a skill is named by function in kebab-case, because its `name` is a *model-visible identifier* and the string a human types after `/name` — ownership is expressed by the **directory**, not the name. The convention is that the directory name equals the frontmatter `name`; note that dsh does **not** validate this.
+
+A skill is either `<name>/SKILL.md` (directory bundle, may carry resources) or `<name>.md`, and only the **top level** of a skill root is scanned — a nested `**/SKILL.md` is not discovered. Frontmatter requires `name` + `description`, plus optional `whenToUse` / `metadata` / `disable-model-invocation` / `user-invocable` (the camelCase legacy keys are rejected).
+
+**Loading semantics — do not describe this as "loaded at startup".** The model automatically sees only the skill **catalog** (name, plus a description truncated to 500 chars), injected as a durable user-role message before a session's **first request**. A skill **body** loads on demand — when the model calls the `skill` tool, or a human types `/name` — and bodies are never cached.
+
+**Generic skills do not load themselves.** Each wrapper opts in; dsh's mechanism is `customSkillDirs`, which is how the shipped `cordis` preset points `skill-filesystem` at its own `skills/`.
+
+> The only skill written so far — `harmony-runtime-capabilities` — is **wrapper-specific** (it documents the HarmonyOS HAP sandbox, `hmdfs`, and this build's capability gaps), so it lives at [`deepseek-harness-harmony/skills/harmony-runtime-capabilities/`](deepseek-harness-harmony/skills/harmony-runtime-capabilities/). That is why `skills/` is currently empty but for its own README. See [`skills/README.md`](skills/README.md) and [`deepseek-harness-harmony/skills/README.md`](deepseek-harness-harmony/skills/README.md).
 
 ### Current versions
 

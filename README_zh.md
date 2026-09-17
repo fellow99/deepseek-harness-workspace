@@ -26,6 +26,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 ├── deepseek-harness/                  # [submodule] dsh —— 被封装的 Agent 主机（上游）
 ├── dsh-market/                        # [submodule] 可视化插件市场（npm 包 "dshmarket"）
 ├── dsh-plugins/                       # （普通目录）通用、可共享的 dsh 插件 —— 一插件一目录，命名 dsh-plugin-XXX
+├── skills/                            # （普通目录）通用、可共享的 dsh 工具技能 —— 一技能一目录，功能性 kebab-case 名
 ├── harmonypc-electron/                # [submodule] Electron-on-HarmonyOS 运行时（Electron 37 / Node 22.17.0）
 ├── deepseek-harness-desktop-website/  # [submodule] 两个封装工程的产品官网
 └── harmonypc-electron-versions/       # （普通目录，非 submodule）运行时发行版归档 + Electron 头文件指南
@@ -40,6 +41,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 | `deepseek-harness` | 被封装的 Agent 主机（`dsh`，上游源码引用） | 两个封装工程 |
 | `dsh-market` | 内置可视化插件市场 | 两个封装工程 |
 | `dsh-plugins` | **通用、可共享**的 dsh 插件，一插件一目录，命名 `dsh-plugin-XXX`。目前除自身 README 外为空（见 [`dsh-plugins/README.md`](dsh-plugins/README.md)）；封装工程专用的插件放在各自工程内 | 任一封装工程 |
+| `skills` | **通用、可共享**的 dsh 工具技能，一技能一目录，功能性 kebab-case 名。目前除自身 README 外为空（见 [`skills/README.md`](skills/README.md)）；封装工程专用的技能放在各自工程内 | 任一封装工程 |
 | `harmonypc-electron` | Electron-on-HarmonyOS 运行时（原生 SO + ArkTS 桥接层） | 仅 harmony |
 | `deepseek-harness-desktop-website` | 两个封装工程的产品官网 | — |
 | `harmonypc-electron-versions` | Electron-on-HarmonyOS 发行版归档（v34/v37/v40）+ 用于重编译原生模块（如 `better-sqlite3`）的 Node 头文件指南 | harmony 工具链 |
@@ -58,6 +60,25 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 插件均为纯 ESM（`lib/index.js`，无构建步骤）。各消费壳在收集阶段把需要的插件物化进自己随包分发的 `dsh-dist/node_modules/`，再由 agent preset 的一行挂载。
 
 > 目前唯一的插件——`delete` / `move` 文件工具——属**封装工程专用**：它需要 harmony 封装的 `dsh-fs-remove-primitive` 补丁提供 `ctx.fs.remove`，因此位于 [`deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/`](deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/)。这也是 `dsh-plugins/` 目前除自身 README 外为空的原因。详见 [`dsh-plugins/README.md`](dsh-plugins/README.md) 与 [`deepseek-harness-harmony/plugins/README.md`](deepseek-harness-harmony/plugins/README.md)。
+
+### 技能约定
+
+工具技能与插件采用**同一套两层分工**：
+
+| 位置 | 层级 | 被谁消费 |
+|---|---|---|
+| `skills/`（本 workspace） | **通用 / 可共享** —— 在任何 dsh 壳上都成立 | 任一封装工程 |
+| `<封装工程>/skills/`（如 [`deepseek-harness-harmony/skills/`](deepseek-harness-harmony/skills/)） | **封装工程专用** —— 描述该壳自己的运行期（沙箱、打包路径、能力缺口） | 仅该封装工程 |
+
+与插件不同：**技能名不加前缀**，一律用功能性 kebab-case。因为技能的 `name` 是**模型可见标识**，也是人工 `/name` 要输入的字符串 —— 归属由**目录**表达，不由名字表达。约定「目录名 == frontmatter `name`」，但注意 dsh **并不校验**这一点。
+
+技能形态为 `<技能名>/SKILL.md`（目录包，可携带资源）或 `<技能名>.md`；技能根**只扫描顶层**，嵌套的 `**/SKILL.md` 不会被发现。frontmatter 必填 `name` + `description`，可选 `whenToUse` / `metadata` / `disable-model-invocation` / `user-invocable`（驼峰旧键会被拒绝）。
+
+**加载语义 —— 不要描述成"启动时即加载"。** 模型自动看到的只是技能**目录**（名称 + 截断到 500 字的描述），它在会话**首次请求之前**作为一条持久 user-role 消息注入；技能**正文按需加载**（模型调 `skill` 工具，或人工打 `/name`），且不缓存。
+
+**通用技能不会自动生效。** 每个壳自行选择采纳；dsh 提供的机制是 `customSkillDirs` —— 自带的 `cordis` preset 就是这样把它自己的 `skills/` 指给 `skill-filesystem` 的。
+
+> 目前唯一的技能——`harmony-runtime-capabilities`——属**封装工程专用**（它讲的是 HarmonyOS HAP 的沙箱、`hmdfs` 与本构建的能力缺口），因此位于 [`deepseek-harness-harmony/skills/harmony-runtime-capabilities/`](deepseek-harness-harmony/skills/harmony-runtime-capabilities/)。这也是 `skills/` 目前除自身 README 外为空的原因。详见 [`skills/README.md`](skills/README.md) 与 [`deepseek-harness-harmony/skills/README.md`](deepseek-harness-harmony/skills/README.md)。
 
 ### 当前版本
 
