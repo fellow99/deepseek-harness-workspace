@@ -54,7 +54,7 @@ dsh 的技能发现规则（实现位于 `deepseek-harness` 的 `packages/skill/
 
 ## 四、如何被采纳（通用技能不会自动生效）
 
-**与壳专用技能不同，本目录的技能不会被任何壳自动加载。** 每个壳自行决定是否采纳。dsh 提供的标准机制是 `skill-filesystem` 的 `customSkillDirs`：
+**通用技能没有自动加载机制**：dsh 不会自动扫描本目录 —— 每个壳必须显式把本目录加进它的技能根才会采纳。dsh 提供的标准机制是 `skill-filesystem` 的 `customSkillDirs`：
 
 ```yaml
 - id: skill-filesystem
@@ -66,7 +66,7 @@ dsh 的技能发现规则（实现位于 `deepseek-harness` 的 `packages/skill/
 
 这是 dsh 自带 `cordis` preset 指向自己 `skills/` 的写法（`packages/preset/agent-presets/presets/cordis/agent.cordis.yml`）；`baseUrl` 是该 preset 自身目录。
 
-> **现状**：目前两个壳都**没有**采纳本目录 —— 它们的 bundled 根各自指向自己的 `skills/`。本目录是"通用技能"的归位点，当前为空。
+> **现状**：本目录**当前没有采纳方**。已核实本工程（harmony）未采纳 —— 它的 bundled 根指向自己的 `skills/`（`src-main/main.js` 的 `DSH_BUNDLED_SKILL_DIR`）。本目录是"通用技能"的归位点，当前为空。
 
 ## 五、新增一个技能
 
