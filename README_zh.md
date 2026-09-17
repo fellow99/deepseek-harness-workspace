@@ -25,6 +25,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 ├── deepseek-harness-harmony/          # [submodule] 鸿蒙桌面封装（2in1/平板，HAP）
 ├── deepseek-harness/                  # [submodule] dsh —— 被封装的 Agent 主机（上游）
 ├── dsh-market/                        # [submodule] 可视化插件市场（npm 包 "dshmarket"）
+├── dsh-plugins/                       # （普通目录）通用、可共享的 dsh 插件 —— 一插件一目录，命名 dsh-plugin-XXX
 ├── harmonypc-electron/                # [submodule] Electron-on-HarmonyOS 运行时（Electron 37 / Node 22.17.0）
 ├── deepseek-harness-desktop-website/  # [submodule] 两个封装工程的产品官网
 └── harmonypc-electron-versions/       # （普通目录，非 submodule）运行时发行版归档 + Electron 头文件指南
@@ -38,9 +39,25 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 | `deepseek-harness-harmony` | 鸿蒙桌面移植版（以 desktop 为基准） | — |
 | `deepseek-harness` | 被封装的 Agent 主机（`dsh`，上游源码引用） | 两个封装工程 |
 | `dsh-market` | 内置可视化插件市场 | 两个封装工程 |
+| `dsh-plugins` | **通用、可共享**的 dsh 插件，一插件一目录，命名 `dsh-plugin-XXX`。目前除自身 README 外为空（见 [`dsh-plugins/README.md`](dsh-plugins/README.md)）；封装工程专用的插件放在各自工程内 | 任一封装工程 |
 | `harmonypc-electron` | Electron-on-HarmonyOS 运行时（原生 SO + ArkTS 桥接层） | 仅 harmony |
 | `deepseek-harness-desktop-website` | 两个封装工程的产品官网 | — |
 | `harmonypc-electron-versions` | Electron-on-HarmonyOS 发行版归档（v34/v37/v40）+ 用于重编译原生模块（如 `better-sqlite3`）的 Node 头文件指南 | harmony 工具链 |
+
+### 插件约定
+
+第一方 dsh 插件分**两层**，按"谁能消费它"区分：
+
+| 位置 | 层级 | 命名 |
+|---|---|---|
+| `dsh-plugins/`（本 workspace） | **通用 / 可共享** —— 不依赖任何特定封装工程的补丁，任何壳都能消费 | `dsh-plugin-XXX` |
+| `<封装工程>/plugins/`（如 [`deepseek-harness-harmony/plugins/`](deepseek-harness-harmony/plugins/)） | **封装工程专用** —— 依赖该壳自己的补丁集 / profile / 运行期适配；编译期打入包内，运行期**全部默认加载** | harmony 壳为 `harmony-plugin-XXX` |
+
+两层中目录名都同时是包 `name`（裸包名 / 非 scoped），`XXX` 描述该插件新增的功能。判断归哪一层的一句问法：*「把它装到另一个 dsh 壳上，它还能工作吗？」* 能 → 通用；不能 → 封装工程专用。
+
+插件均为纯 ESM（`lib/index.js`，无构建步骤）。各消费壳在收集阶段把需要的插件物化进自己随包分发的 `dsh-dist/node_modules/`，再由 agent preset 的一行挂载。
+
+> 目前唯一的插件——`delete` / `move` 文件工具——属**封装工程专用**：它需要 harmony 封装的 `dsh-fs-remove-primitive` 补丁提供 `ctx.fs.remove`，因此位于 [`deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/`](deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/)。这也是 `dsh-plugins/` 目前除自身 README 外为空的原因。详见 [`dsh-plugins/README.md`](dsh-plugins/README.md) 与 [`deepseek-harness-harmony/plugins/README.md`](deepseek-harness-harmony/plugins/README.md)。
 
 ### 当前版本
 

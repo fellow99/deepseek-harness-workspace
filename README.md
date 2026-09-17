@@ -25,6 +25,7 @@ deepseek-harness-workspace/            # this repo — submodule container
 ├── deepseek-harness-harmony/          # [submodule] HarmonyOS desktop wrapper (2in1/tablet, HAP)
 ├── deepseek-harness/                  # [submodule] dsh — the wrapped agent host (upstream)
 ├── dsh-market/                        # [submodule] visual plugin marketplace (npm pkg "dshmarket")
+├── dsh-plugins/                       # (plain dir) generic, shareable dsh plugins — one dir per plugin, named dsh-plugin-XXX
 ├── harmonypc-electron/                # [submodule] Electron-on-HarmonyOS runtime (Electron 37 / Node 22.17.0)
 ├── deepseek-harness-desktop-website/  # [submodule] website of the two wrappers
 └── harmonypc-electron-versions/       # (plain dir, not a submodule) runtime release archives + Electron header guides
@@ -38,9 +39,25 @@ deepseek-harness-workspace/            # this repo — submodule container
 | `deepseek-harness-harmony` | HarmonyOS desktop port (benchmarked against desktop) | — |
 | `deepseek-harness` | The wrapped agent host (`dsh`, upstream source reference) | both wrappers |
 | `dsh-market` | Built-in visual plugin marketplace | both wrappers |
+| `dsh-plugins` | **Generic, shareable** dsh plugins — one directory per plugin, named `dsh-plugin-XXX`. Currently empty but for its own README (see [`dsh-plugins/README.md`](dsh-plugins/README.md)); wrapper-specific plugins live inside their wrapper | any wrapper |
 | `harmonypc-electron` | Electron-on-HarmonyOS runtime (native SOs + ArkTS bridge) | harmony only |
 | `deepseek-harness-desktop-website` | Product website of the two wrappers | — |
 | `harmonypc-electron-versions` | Electron-on-HarmonyOS release archives (v34/v37/v40) + Node-header guides for rebuilding native modules like `better-sqlite3` | harmony tooling |
+
+### Plugin convention
+
+First-party dsh plugins are split into **two tiers**, distinguished by who can consume them:
+
+| Location | Tier | Naming |
+|---|---|---|
+| `dsh-plugins/` (this workspace) | **Generic / shareable** — depends on no wrapper-specific patch, so any shell can consume it | `dsh-plugin-XXX` |
+| `<wrapper>/plugins/` (e.g. [`deepseek-harness-harmony/plugins/`](deepseek-harness-harmony/plugins/)) | **Wrapper-specific** — depends on that wrapper's own patch set / profile / runtime adaptations; baked into the package at build time and **all loaded by default** | `harmony-plugin-XXX` for the harmony wrapper |
+
+In both tiers the directory name is also the package `name` (a bare, unscoped name), where `XXX` names the function the plugin adds. The test for which tier a plugin belongs to: *"would it still work if installed into another dsh shell?"* Yes → generic; no → wrapper-specific.
+
+Plugins are plain ESM (`lib/index.js`, no build step). Each consuming wrapper materializes the plugins it wants into its own shipped `dsh-dist/node_modules/` at collect time, then mounts them from an agent-preset row.
+
+> The only plugin written so far — the `delete`/`move` file tools — is **wrapper-specific**: it needs the harmony wrapper's `dsh-fs-remove-primitive` patch for `ctx.fs.remove`, so it lives at [`deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/`](deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/). That is also why `dsh-plugins/` is currently empty but for its own README. See [`dsh-plugins/README.md`](dsh-plugins/README.md) and [`deepseek-harness-harmony/plugins/README.md`](deepseek-harness-harmony/plugins/README.md).
 
 ### Current versions
 
