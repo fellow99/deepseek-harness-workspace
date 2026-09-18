@@ -42,4 +42,4 @@
 
 - [`deepseek-harness-harmony/plugins/README.md`](../deepseek-harness-harmony/plugins/README.md) —— harmony 壳的专用插件目录约定
 - [`README.md`](../README.md) —— workspace 总说明的「Plugin convention」节
-- [`deepseek-harness-harmony/specs/201-plugin-fs-mutate/`](../deepseek-harness-harmony/specs/201-plugin-fs-mutate/) —— `delete` / `move` 插件迁出本目录的规格、方案与测试用例
+- [`deepseek-harness-harmony/specs/202-plugin-fs-mutate/`](../deepseek-harness-harmony/specs/202-plugin-fs-mutate/) —— `delete` / `move` / `copy` / `chmod` 壳专用插件的规格、方案与测试用例
