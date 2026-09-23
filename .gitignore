@@ -30,6 +30,8 @@ yarn-error.log*
 /harmonypc-electron-versions
 /_test
 
+.cache
+.deveco
 .sisyphus
 .opencode
 .omo
