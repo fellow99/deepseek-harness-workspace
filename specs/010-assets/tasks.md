@@ -7,7 +7,7 @@
 ## 阶段一：物料分发（复制）
 
 - [ ] T1 复制 desktop 物料：`assets/logo.ico` → `deepseek-harness-desktop/resources/icon.ico`；`assets/logo.png` → `resources/icon.png` + `resources/tray.png`；`assets/logo.icns` → `resources/icon.icns`
-- [ ] T2 复制 harmony 物料：`assets/logo.png` → 覆盖 `deepseek-harness-harmony/AppScope/resources/base/media/app_icon.png` 与 `startIcon.png`
+- [ ] T2 复制 harmony 物料：`assets/logo-1024-with-bg.png`（**不透明底**）→ 覆盖 `deepseek-harness-harmony/AppScope/resources/base/media/{app_icon,startIcon,icon,product_logo_32}.png`
 - [ ] T3 复制 website 物料：`assets/logo.svg` → `deepseek-harness-desktop-website/images/logo.svg`
 
 ## 阶段二：deepseek-harness-desktop 接线
@@ -20,11 +20,11 @@
 
 ## 阶段三：deepseek-harness-harmony 接线
 
-- [ ] T9 `AppScope/resources/base/element/string.json`：`app_name` → `Deepseek Harness Harmony`
-- [ ] T10 `electron/src/main/resources/base/element/string.json`：`EntryAbility_label` → `Deepseek Harness Harmony`
+- [ ] T9 `AppScope/resources/base/element/string.json`：`app_name` → `DSH Desktop`
+- [ ] T10 `electron/src/main/resources/base/element/string.json`：`EntryAbility_label` → `DSH Desktop`
 - [ ] T11 `electron/src/main/resources/en_US/element/string.json`：同上
 - [ ] T12 `electron/src/main/resources/zh_CN/element/string.json`：同上
-- [ ] T13 `src-main/main.js`：标题 3 处（28/48/495）→ `Deepseek Harness Harmony`，并镜像到 `web_engine/src/main/resources/resfile/resources/app/main.js`
+- [ ] T13 `src-main/main.js`：标题 3 处（28/48/495）→ `DSH Desktop`，并镜像到 `web_engine/src/main/resources/resfile/resources/app/main.js`
 
 ## 阶段四：deepseek-harness-desktop-website 接线
 

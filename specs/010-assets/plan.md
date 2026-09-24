@@ -22,9 +22,11 @@
 | 物料 | 大小 | 目标用途 |
 |------|------|----------|
 | `logo.ico` | ~169KB（多分辨率） | desktop Windows 打包/安装图标 |
-| `logo.icns` | ~2KB | desktop macOS 打包图标 |
-| `logo.png` | ~4KB | desktop 窗口/托盘 + harmony 应用图标 |
-| `logo.svg` | ~2KB（矢量） | website favicon/wordmark |
+| `logo.icns` | ICNS | desktop macOS 打包图标 |
+| `logo.png` | 200×200（含透明） | desktop 窗口/托盘 |
+| `logo.svg` | ~1KB（矢量） | website favicon/wordmark |
+| `logo-1024-with-bg.png` | 1024×1024（**不透明底**） | harmony 应用图标（`app_icon`/`startIcon`/`icon`/`product_logo_32`） |
+| `logo-200-with-bg.png` | 200×200（不透明底） | 不透明底备用位图 |
 
 ## 2. 宪法合规检查
 
@@ -46,7 +48,7 @@
 |------|------|
 | 物料复制到 `resources/`（desktop） | Electron Forge 约定 `resources/` 存放应用图标；`packagerConfig.icon` 直接引用源文件路径 |
 | 托盘图标复用 `logo.png` | 托盘图标即小尺寸位图；`logo.png` 满足，无需单独 `tray.png`（如有尺寸问题再单独生成） |
-| harmony 图标**覆盖** `app_icon.png`/`startIcon.png` 内容 | 保持 `$media:` 引用不变，零代码改动，仅替换位图字节 |
+| harmony 图标**覆盖** `app_icon.png`/`startIcon.png`/`icon.png`/`product_logo_32.png` 内容，且统一用**不透明底** `logo-1024-with-bg.png` | 保持 `$media:` 引用不变，零代码改动，仅替换位图字节；应用市场要求应用图标使用纯色背景、避免透明图层 |
 | harmony 名改动覆盖三 locale + app_name + in-app | 需求明确「全部统一」，避免局部残留「Electron」或「DeepSeek Harness」 |
 | website 用 `logo.svg` 作 favicon + wordmark | SVG 矢量自适应缩放，适合站点；favicon 现代浏览器支持 SVG |
 | `product_logo_32.png` 保留不动 | 未被引用，非本模块职责；清理需另行决策 |
@@ -91,13 +93,15 @@
 
 | 文件 | 变更 |
 |------|------|
-| `AppScope/resources/base/media/app_icon.png`（覆盖） | 替换为 `logo.png` 内容 |
-| `AppScope/resources/base/media/startIcon.png`（覆盖） | 替换为 `logo.png` 内容 |
-| `AppScope/resources/base/element/string.json`（改） | `app_name` → `Deepseek Harness Harmony` |
-| `electron/src/main/resources/base/element/string.json`（改） | `EntryAbility_label` → `Deepseek Harness Harmony` |
+| `AppScope/resources/base/media/app_icon.png`（覆盖） | 替换为 `logo-1024-with-bg.png`（不透明）内容 |
+| `AppScope/resources/base/media/startIcon.png`（覆盖） | 替换为 `logo-1024-with-bg.png`（不透明）内容 |
+| `AppScope/resources/base/media/icon.png`（覆盖） | 替换为 `logo-1024-with-bg.png`（不透明）内容 |
+| `AppScope/resources/base/media/product_logo_32.png`（覆盖） | 替换为 `logo-1024-with-bg.png`（不透明）内容 |
+| `AppScope/resources/base/element/string.json`（改） | `app_name` → `DSH Desktop` |
+| `electron/src/main/resources/base/element/string.json`（改） | `EntryAbility_label` → `DSH Desktop` |
 | `electron/src/main/resources/en_US/element/string.json`（改） | 同上 |
 | `electron/src/main/resources/zh_CN/element/string.json`（改） | 同上 |
-| `src-main/main.js`（改） | 标题 3 处 → `Deepseek Harness Harmony` |
+| `src-main/main.js`（改） | 标题 3 处 → `DSH Desktop` |
 | `web_engine/src/main/resources/resfile/resources/app/main.js`（改） | 镜像同步 |
 
 ### 5.3 deepseek-harness-desktop-website
@@ -130,7 +134,7 @@
 ## 7. 测试考虑
 
 - **desktop**：`npm run package` 后验证 exe/安装器图标；运行时验证窗口/托盘图标。
-- **harmony**：编译 + 部署真机，验证桌面名「Deepseek Harness Harmony」与图标。
+- **harmony**：编译 + 部署真机，验证桌面名「DSH Desktop」与图标。
 - **website**：浏览器打开验证 favicon + wordmark。
 - 详见 [test-cases.md](./test-cases.md)。
 
@@ -147,7 +151,7 @@
 | `deepseek-harness-desktop/src/main/windows.ts`（改） | 窗口图标 |
 | `deepseek-harness-desktop/src/main/tray.ts`（改） | 托盘图标 |
 | `deepseek-harness-desktop/index.html`（改） | favicon |
-| `deepseek-harness-harmony/AppScope/resources/base/media/{app_icon,startIcon}.png`（覆盖） | 应用图标 |
+| `deepseek-harness-harmony/AppScope/resources/base/media/{app_icon,startIcon,icon,product_logo_32}.png`（覆盖，源 `logo-1024-with-bg.png`） | 应用图标（不透明） |
 | `deepseek-harness-harmony/AppScope/resources/base/element/string.json`（改） | app_name |
 | `deepseek-harness-harmony/electron/src/main/resources/*/element/string.json`（改×3） | EntryAbility_label |
 | `deepseek-harness-harmony/src-main/main.js` + resfile 副本（改） | in-app 标题 |

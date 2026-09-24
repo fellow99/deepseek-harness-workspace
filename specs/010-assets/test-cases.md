@@ -39,13 +39,13 @@
 ### TC-005 harmony 物料就位
 
 - **步骤**：检查 `deepseek-harness-harmony/AppScope/resources/base/media/`。
-- **预期**：`app_icon.png`、`startIcon.png` 内容为产品 LOGO。
+- **预期**：`app_icon.png`、`startIcon.png`、`icon.png`、`product_logo_32.png` 内容为产品 LOGO，**四张均为 1024×1024 且不含透明通道**（源 `logo-1024-with-bg.png`）。
 
 ### TC-006 harmony OS 桌面名
 
 - **前置**：编译并部署真机。
 - **步骤**：查看系统桌面 App 名称。
-- **预期**：显示「Deepseek Harness Harmony」（非「Electron」）。
+- **预期**：显示「DSH Desktop」（非「Electron」）。
 
 ### TC-007 harmony 应用图标
 
@@ -56,7 +56,7 @@
 ### TC-008 harmony in-app 标题
 
 - **步骤**：启动 App，观察加载页标题。
-- **预期**：显示「Deepseek Harness Harmony」（非「DeepSeek Harness」）。
+- **预期**：显示「DSH Desktop」（非「DeepSeek Harness」）。
 
 ### TC-009 website favicon
 
@@ -95,7 +95,7 @@
 | TC-002 desktop 打包图标 | ⚠️ | `npm run package` 卡于 electron headers 网络下载（ECONNRESET），环境问题 |
 | TC-003 desktop 窗口图标 | ⚠️ | 受 TC-002 阻塞 |
 | TC-004 desktop 托盘图标 | ⚠️ | 受 TC-002 阻塞 |
-| TC-005 harmony 物料就位 | ✅ | 1024×1024 logo 覆盖 app_icon/startIcon |
+| TC-005 harmony 物料就位 | ✅ | 1024×1024 **不透明** logo 覆盖 app_icon/startIcon/icon/product_logo_32 |
 | TC-006 harmony OS 桌面名 | ⚠️ | HAP 编译+签名通过；真机 Offline 未部署 |
 | TC-007 harmony 应用图标 | ⚠️ | 同上 |
 | TC-008 harmony in-app 标题 | ✅ | 源码级验证，编译通过 |
