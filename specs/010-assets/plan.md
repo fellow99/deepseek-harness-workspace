@@ -13,9 +13,9 @@
 ### 1.1 运行环境
 
 - **父工程**：submodule 容器工作区，持有唯一物料源 `assets/`，无构建产物。
-- **deepseek-harness-desktop**：Electron `^43` + Electron Forge + Vite + TypeScript；应用图标经 `packagerConfig.icon`（打包）与 `BrowserWindow.icon`/`Tray`（运行时）加载。
-- **deepseek-harness-harmony**：HarmonyOS Stage 模型 ArkTS；应用名经 `EntryAbility_label` / `app_name` 字符串资源；图标经 `$media:app_icon` / `$media:startIcon`。
-- **deepseek-harness-desktop-website**：纯静态站点（HTML/CSS/JS），无构建。
+- **dsh-desktop**：Electron `^43` + Electron Forge + Vite + TypeScript；应用图标经 `packagerConfig.icon`（打包）与 `BrowserWindow.icon`/`Tray`（运行时）加载。
+- **dsh-desktop-hos**：HarmonyOS Stage 模型 ArkTS；应用名经 `EntryAbility_label` / `app_name` 字符串资源；图标经 `$media:app_icon` / `$media:startIcon`。
+- **dsh-desktop-website**：纯静态站点（HTML/CSS/JS），无构建。
 
 ### 1.2 物料源
 
@@ -76,7 +76,7 @@
 
 ## 5. 接口契约
 
-### 5.1 deepseek-harness-desktop
+### 5.1 dsh-desktop
 
 | 文件 | 变更 |
 |------|------|
@@ -89,7 +89,7 @@
 | `src/main/tray.ts`（改） | `nativeImage.createFromPath(...)` 替换空占位 |
 | `index.html`（改） | `<link rel="icon">` favicon |
 
-### 5.2 deepseek-harness-harmony
+### 5.2 dsh-desktop-hos
 
 | 文件 | 变更 |
 |------|------|
@@ -104,7 +104,7 @@
 | `src-main/main.js`（改） | 标题 3 处 → `DSH Desktop` |
 | `web_engine/src/main/resources/resfile/resources/app/main.js`（改） | 镜像同步 |
 
-### 5.3 deepseek-harness-desktop-website
+### 5.3 dsh-desktop-website
 
 | 文件 | 变更 |
 |------|------|
@@ -146,17 +146,17 @@
 | `specs/010-assets/plan.md` | 技术方案（本文档） |
 | `specs/010-assets/tasks.md` | 任务拆解 |
 | `specs/010-assets/test-cases.md` | 测试用例 |
-| `deepseek-harness-desktop/resources/icon.{ico,png,icns}` + `tray.png`（新） | 复制物料 |
-| `deepseek-harness-desktop/forge.config.ts`（改） | 打包图标 |
-| `deepseek-harness-desktop/src/main/windows.ts`（改） | 窗口图标 |
-| `deepseek-harness-desktop/src/main/tray.ts`（改） | 托盘图标 |
-| `deepseek-harness-desktop/index.html`（改） | favicon |
-| `deepseek-harness-harmony/AppScope/resources/base/media/{app_icon,startIcon,icon,product_logo_32}.png`（覆盖，源 `logo-1024-with-bg.png`） | 应用图标（不透明） |
-| `deepseek-harness-harmony/AppScope/resources/base/element/string.json`（改） | app_name |
-| `deepseek-harness-harmony/electron/src/main/resources/*/element/string.json`（改×3） | EntryAbility_label |
-| `deepseek-harness-harmony/src-main/main.js` + resfile 副本（改） | in-app 标题 |
-| `deepseek-harness-desktop-website/images/logo.svg`（新） | favicon/wordmark 物料 |
-| `deepseek-harness-desktop-website/index.html` + `index_zh.html`（改） | favicon + wordmark |
+| `dsh-desktop/resources/icon.{ico,png,icns}` + `tray.png`（新） | 复制物料 |
+| `dsh-desktop/forge.config.ts`（改） | 打包图标 |
+| `dsh-desktop/src/main/windows.ts`（改） | 窗口图标 |
+| `dsh-desktop/src/main/tray.ts`（改） | 托盘图标 |
+| `dsh-desktop/index.html`（改） | favicon |
+| `dsh-desktop-hos/AppScope/resources/base/media/{app_icon,startIcon,icon,product_logo_32}.png`（覆盖，源 `logo-1024-with-bg.png`） | 应用图标（不透明） |
+| `dsh-desktop-hos/AppScope/resources/base/element/string.json`（改） | app_name |
+| `dsh-desktop-hos/electron/src/main/resources/*/element/string.json`（改×3） | EntryAbility_label |
+| `dsh-desktop-hos/src-main/main.js` + resfile 副本（改） | in-app 标题 |
+| `dsh-desktop-website/images/logo.svg`（新） | favicon/wordmark 物料 |
+| `dsh-desktop-website/index.html` + `index_zh.html`（改） | favicon + wordmark |
 
 ## 9. 与规格的交叉引用
 

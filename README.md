@@ -12,8 +12,8 @@
 
 DeepSeek Harness (`dsh`) is an open-source agent harness by DeepSeek AI, built on an "everything is a plugin" architecture; its native entry is `dsh web` (a browser Web UI). Two sibling wrapper projects turn that Web UI into native desktop apps — fully reusing the dsh frontend and hosting the dsh Host in-process:
 
-- **`deepseek-harness-desktop`** — an Electron desktop shell for Windows / Linux (macOS later)
-- **`deepseek-harness-harmony`** — a HarmonyOS desktop port (2in1 / tablet, packaged as a HAP) on the Electron-on-HarmonyOS runtime
+- **`dsh-desktop`** — an Electron desktop shell for Windows / Linux (macOS later)
+- **`dsh-desktop-hos`** — a HarmonyOS desktop port (2in1 / tablet, packaged as a HAP) on the Electron-on-HarmonyOS runtime
 
 Both wrappers consume the same upstream building blocks. This workspace is the container that keeps those building blocks (as submodules) side by side, so the two wrapper projects can be cloned, built, and developed in one place — with their `../sibling` references resolving inside the workspace.
 
@@ -21,14 +21,14 @@ Both wrappers consume the same upstream building blocks. This workspace is the c
 
 ```
 deepseek-harness-workspace/            # this repo — submodule container
-├── deepseek-harness-desktop/          # [submodule] Electron desktop wrapper (Windows/Linux)
-├── deepseek-harness-harmony/          # [submodule] HarmonyOS desktop wrapper (2in1/tablet, HAP)
+├── dsh-desktop/          # [submodule] Electron desktop wrapper (Windows/Linux)
+├── dsh-desktop-hos/          # [submodule] HarmonyOS desktop wrapper (2in1/tablet, HAP)
 ├── deepseek-harness/                  # [submodule] dsh — the wrapped agent host (upstream)
 ├── dsh-market/                        # [submodule] visual plugin marketplace (npm pkg "dshmarket")
 ├── dsh-plugins/                       # (plain dir) generic, shareable dsh plugins — one dir per plugin, named dsh-plugin-XXX
 ├── skills/                            # (plain dir) generic, shareable dsh tool skills — one dir per skill, kebab-case name
 ├── harmonypc-electron/                # [submodule] Electron-on-HarmonyOS runtime (Electron 37 / Node 22.17.0)
-├── deepseek-harness-desktop-website/  # [submodule] website of the two wrappers
+├── dsh-desktop-website/  # [submodule] website of the two wrappers
 └── harmonypc-electron-versions/       # (plain dir, not a submodule) runtime release archives + Electron header guides
 ```
 
@@ -36,14 +36,14 @@ deepseek-harness-workspace/            # this repo — submodule container
 
 | Directory | Role | Consumed by |
 |---|---|---|
-| `deepseek-harness-desktop` | Electron desktop shell — the primary wrapper | — |
-| `deepseek-harness-harmony` | HarmonyOS desktop port (benchmarked against desktop) | — |
+| `dsh-desktop` | Electron desktop shell — the primary wrapper | — |
+| `dsh-desktop-hos` | HarmonyOS desktop port (benchmarked against desktop) | — |
 | `deepseek-harness` | The wrapped agent host (`dsh`, upstream source reference) | both wrappers |
 | `dsh-market` | Built-in visual plugin marketplace | both wrappers |
 | `dsh-plugins` | **Generic, shareable** dsh plugins — one directory per plugin, named `dsh-plugin-XXX`. Currently empty but for its own README (see [`dsh-plugins/README.md`](dsh-plugins/README.md)); wrapper-specific plugins live inside their wrapper | any wrapper |
 | `skills` | **Generic, shareable** dsh tool skills — one directory per skill, kebab-case name. Currently empty but for its own README (see [`skills/README.md`](skills/README.md)); wrapper-specific skills live inside their wrapper | any wrapper |
 | `harmonypc-electron` | Electron-on-HarmonyOS runtime (native SOs + ArkTS bridge) | harmony only |
-| `deepseek-harness-desktop-website` | Product website of the two wrappers | — |
+| `dsh-desktop-website` | Product website of the two wrappers | — |
 | `harmonypc-electron-versions` | Electron-on-HarmonyOS release archives (v34/v37/v40) + Node-header guides for rebuilding native modules like `better-sqlite3` | harmony tooling |
 
 ### Plugin convention
@@ -53,13 +53,13 @@ First-party dsh plugins are split into **two tiers**, distinguished by who can c
 | Location | Tier | Naming |
 |---|---|---|
 | `dsh-plugins/` (this workspace) | **Generic / shareable** — depends on no wrapper-specific patch, so any shell can consume it | `dsh-plugin-XXX` |
-| `<wrapper>/plugins/` (e.g. [`deepseek-harness-harmony/plugins/`](deepseek-harness-harmony/plugins/)) | **Wrapper-specific** — depends on that wrapper's own patch set / profile / runtime adaptations; baked into the package at build time and **all loaded by default** | `harmony-plugin-XXX` for the harmony wrapper |
+| `<wrapper>/plugins/` (e.g. [`dsh-desktop-hos/plugins/`](dsh-desktop-hos/plugins/)) | **Wrapper-specific** — depends on that wrapper's own patch set / profile / runtime adaptations; baked into the package at build time and **all loaded by default** | `harmony-plugin-XXX` for the harmony wrapper |
 
 In both tiers the directory name is also the package `name` (a bare, unscoped name), where `XXX` names the function the plugin adds. The test for which tier a plugin belongs to: *"would it still work if installed into another dsh shell?"* Yes → generic; no → wrapper-specific.
 
 Plugins are plain ESM (`lib/index.js`, no build step). Each consuming wrapper materializes the plugins it wants into its own shipped `dsh-dist/node_modules/` at collect time, then mounts them from an agent-preset row.
 
-> The only plugin written so far — the `delete`/`move` file tools — is **wrapper-specific**: it needs the harmony wrapper's `dsh-fs-remove-primitive` patch for `ctx.fs.remove`, so it lives at [`deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/`](deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/). That is also why `dsh-plugins/` is currently empty but for its own README. See [`dsh-plugins/README.md`](dsh-plugins/README.md) and [`deepseek-harness-harmony/plugins/README.md`](deepseek-harness-harmony/plugins/README.md).
+> The only plugin written so far — the `delete`/`move` file tools — is **wrapper-specific**: it needs the harmony wrapper's `dsh-fs-remove-primitive` patch for `ctx.fs.remove`, so it lives at [`dsh-desktop-hos/plugins/harmony-plugin-fs-mutate/`](dsh-desktop-hos/plugins/harmony-plugin-fs-mutate/). That is also why `dsh-plugins/` is currently empty but for its own README. See [`dsh-plugins/README.md`](dsh-plugins/README.md) and [`dsh-desktop-hos/plugins/README.md`](dsh-desktop-hos/plugins/README.md).
 
 ### Skill convention
 
@@ -68,7 +68,7 @@ Tool skills follow the same **two-tier split** as plugins:
 | Location | Tier | Consumed by |
 |---|---|---|
 | `skills/` (this workspace) | **Generic / shareable** — applies to any dsh shell | any wrapper |
-| `<wrapper>/skills/` (e.g. [`deepseek-harness-harmony/skills/`](deepseek-harness-harmony/skills/)) | **Wrapper-specific** — describes that wrapper's own runtime (sandbox, packaging paths, capability gaps) | that wrapper only |
+| `<wrapper>/skills/` (e.g. [`dsh-desktop-hos/skills/`](dsh-desktop-hos/skills/)) | **Wrapper-specific** — describes that wrapper's own runtime (sandbox, packaging paths, capability gaps) | that wrapper only |
 
 Unlike plugins, **skill names carry no prefix**: a skill is named by function in kebab-case, because its `name` is a *model-visible identifier* and the string a human types after `/name` — ownership is expressed by the **directory**, not the name. The convention is that the directory name equals the frontmatter `name`; note that dsh does **not** validate this.
 
@@ -78,14 +78,14 @@ A skill is either `<name>/SKILL.md` (directory bundle, may carry resources) or `
 
 **Generic skills do not load themselves.** Each wrapper opts in; dsh's mechanism is `customSkillDirs`, which is how the shipped `cordis` preset points `skill-filesystem` at its own `skills/`.
 
-> The only skill written so far — `harmony-runtime-capabilities` — is **wrapper-specific** (it documents the HarmonyOS HAP sandbox, `hmdfs`, and this build's capability gaps), so it lives at [`deepseek-harness-harmony/skills/harmony-runtime-capabilities/`](deepseek-harness-harmony/skills/harmony-runtime-capabilities/). That is why `skills/` is currently empty but for its own README. See [`skills/README.md`](skills/README.md) and [`deepseek-harness-harmony/skills/README.md`](deepseek-harness-harmony/skills/README.md).
+> The only skill written so far — `harmony-runtime-capabilities` — is **wrapper-specific** (it documents the HarmonyOS HAP sandbox, `hmdfs`, and this build's capability gaps), so it lives at [`dsh-desktop-hos/skills/harmony-runtime-capabilities/`](dsh-desktop-hos/skills/harmony-runtime-capabilities/). That is why `skills/` is currently empty but for its own README. See [`skills/README.md`](skills/README.md) and [`dsh-desktop-hos/skills/README.md`](dsh-desktop-hos/skills/README.md).
 
 ### Current versions
 
 | Project | Version | dsh version |
 |---|---|---|
-| `deepseek-harness-desktop` | **0.1.5** | `dsh-v0.1.5-rc.2` |
-| `deepseek-harness-harmony` | **0.1.5** | `dsh-v0.1.5-rc.2` |
+| `dsh-desktop` | **0.1.5** | `dsh-v0.1.5-rc.2` |
+| `dsh-desktop-hos` | **0.1.5** | `dsh-v0.1.5-rc.2` |
 | `deepseek-harness` (submodule pin) | — | `dsh-v0.1.5-rc.2` |
 
 Both wrappers pin the same upstream dsh tag, which selects `patches/dsh-v0.1.5-rc.2/` in each project's
@@ -118,8 +118,8 @@ git submodule update --init --recursive   # refresh all pinned submodules
 
 The workspace layout already satisfies each wrapper's sibling prerequisites (`../deepseek-harness`, `../dsh-market`, `../harmonypc-electron`). Build and run instructions are maintained inside each wrapper and may drift from this overview:
 
-- **Desktop**: see [`deepseek-harness-desktop/README.md`](deepseek-harness-desktop/README.md) (`npm run build:dsh` applies the 2 patches and builds dsh + dsh-market, then `npm start` / `npm run package`).
-- **HarmonyOS**: see [`deepseek-harness-harmony/README.md`](deepseek-harness-harmony/README.md) (three-stage build `collect-runtime → build-dsh → collect-dsh`, then HAP build + signing via DevEco Studio / hvigor).
+- **Desktop**: see [`dsh-desktop/README.md`](dsh-desktop/README.md) (`npm run build:dsh` applies the 2 patches and builds dsh + dsh-market, then `npm start` / `npm run package`).
+- **HarmonyOS**: see [`dsh-desktop-hos/README.md`](dsh-desktop-hos/README.md) (three-stage build `collect-runtime → build-dsh → collect-dsh`, then HAP build + signing via DevEco Studio / hvigor).
 
 > The harmony build's first stage copies the runtime from the `../harmonypc-electron` submodule; `harmonypc-electron-versions/` holds the standalone release archives if you need a runtime version other than the pinned submodule.
 
@@ -129,12 +129,12 @@ All entries are recorded in [`.gitmodules`](.gitmodules):
 
 | Path | Remote |
 |---|---|
-| `deepseek-harness-desktop` | https://github.com/fellow99/deepseek-harness-desktop.git |
-| `deepseek-harness-harmony` | https://github.com/fellow99/deepseek-harness-harmony.git |
+| `dsh-desktop` | https://github.com/fellow99/dsh-desktop.git |
+| `dsh-desktop-hos` | https://github.com/fellow99/dsh-desktop-hos.git |
 | `deepseek-harness` | https://github.com/deepseek-ai/deepseek-harness.git |
 | `dsh-market` | https://github.com/dsh-market/dsh-market.git |
 | `harmonypc-electron` | https://atomgit.com/jianguoxu/harmonypc-electron.git |
-| `deepseek-harness-desktop-website` | https://github.com/fellow99/deepseek-harness-desktop-website.git |
+| `dsh-desktop-website` | https://github.com/fellow99/dsh-desktop-website.git |
 
 Advance the pinned commits (e.g. to pick up a new dsh release) with `git submodule update --remote`, then commit the new pointers.
 

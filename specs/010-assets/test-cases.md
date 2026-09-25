@@ -9,15 +9,15 @@
 
 | 环境 | 用途 |
 |------|------|
-| deepseek-harness-desktop（Windows/Linux） | `npm run package` 编译 + 运行时图标验证 |
-| deepseek-harness-harmony（真机已连线） | 编译 + 部署真机，验证桌面名/图标 |
-| deepseek-harness-desktop-website | 浏览器打开验证 favicon/wordmark |
+| dsh-desktop（Windows/Linux） | `npm run package` 编译 + 运行时图标验证 |
+| dsh-desktop-hos（真机已连线） | 编译 + 部署真机，验证桌面名/图标 |
+| dsh-desktop-website | 浏览器打开验证 favicon/wordmark |
 
 ## 2. 功能测试用例
 
 ### TC-001 desktop 物料就位
 
-- **步骤**：检查 `deepseek-harness-desktop/resources/` 目录。
+- **步骤**：检查 `dsh-desktop/resources/` 目录。
 - **预期**：存在 `icon.ico`、`icon.png`、`icon.icns`、`tray.png`。
 
 ### TC-002 desktop 打包图标
@@ -38,7 +38,7 @@
 
 ### TC-005 harmony 物料就位
 
-- **步骤**：检查 `deepseek-harness-harmony/AppScope/resources/base/media/`。
+- **步骤**：检查 `dsh-desktop-hos/AppScope/resources/base/media/`。
 - **预期**：`app_icon.png`、`startIcon.png`、`icon.png`、`product_logo_32.png` 内容为产品 LOGO，**四张均为 1024×1024 且不含透明通道**（源 `logo-1024-with-bg.png`）。
 
 ### TC-006 harmony OS 桌面名

@@ -1,8 +1,8 @@
 # dsh-plugins/ —— 通用、可插拔插件
 
-本目录存放**通用、可插拔**的 dsh 插件：它们**不依赖任何特定封装壳**的补丁、profile 或运行期适配，因此可被任意一个壳（`deepseek-harness-desktop`、`deepseek-harness-harmony`，或未来的其它壳）直接消费。
+本目录存放**通用、可插拔**的 dsh 插件：它们**不依赖任何特定封装壳**的补丁、profile 或运行期适配，因此可被任意一个壳（`dsh-desktop`、`dsh-desktop-hos`，或未来的其它壳）直接消费。
 
-> **本目录当前为空**（只有这份 README）。迄今唯一的插件是 `delete` / `move` 文件工具，它依赖 harmony 壳独有的 `dsh-fs-remove-primitive` 补丁，属**壳专用插件**，已迁至 [`deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/`](../deepseek-harness-harmony/plugins/harmony-plugin-fs-mutate/)。
+> **本目录当前为空**（只有这份 README）。迄今唯一的插件是 `delete` / `move` 文件工具，它依赖 harmony 壳独有的 `dsh-fs-remove-primitive` 补丁，属**壳专用插件**，已迁至 [`dsh-desktop-hos/plugins/harmony-plugin-fs-mutate/`](../dsh-desktop-hos/plugins/harmony-plugin-fs-mutate/)。
 
 ## 一、与封装工程 `plugins/` 的分工
 
@@ -19,7 +19,7 @@
 - 能 → 通用插件，放本目录。
 - 不能（依赖某个壳的补丁集 / profile / 运行期适配）→ 该壳的专用插件，放 `<该壳>/plugins/`。
 
-例：`delete` / `move` 文件工具依赖 `ctx.fs.remove`，而该原语只存在于 harmony 壳打过 [`dsh-fs-remove-primitive.patch`](../deepseek-harness-harmony/patches/dsh-v0.1.5-rc.2/dsh-fs-remove-primitive.patch) 的 dsh 上 → 离开 harmony 壳就不工作 → 属壳专用插件。
+例：`delete` / `move` 文件工具依赖 `ctx.fs.remove`，而该原语只存在于 harmony 壳打过 [`dsh-fs-remove-primitive.patch`](../dsh-desktop-hos/patches/dsh-v0.1.5-rc.2/dsh-fs-remove-primitive.patch) 的 dsh 上 → 离开 harmony 壳就不工作 → 属壳专用插件。
 
 ## 二、约定
 
@@ -40,6 +40,6 @@
 
 ## 四、相关文档
 
-- [`deepseek-harness-harmony/plugins/README.md`](../deepseek-harness-harmony/plugins/README.md) —— harmony 壳的专用插件目录约定
+- [`dsh-desktop-hos/plugins/README.md`](../dsh-desktop-hos/plugins/README.md) —— harmony 壳的专用插件目录约定
 - [`README.md`](../README.md) —— workspace 总说明的「Plugin convention」节
-- [`deepseek-harness-harmony/specs/202-plugin-fs-mutate/`](../deepseek-harness-harmony/specs/202-plugin-fs-mutate/) —— `delete` / `move` / `copy` / `chmod` 壳专用插件的规格、方案与测试用例
+- [`dsh-desktop-hos/specs/202-plugin-fs-mutate/`](../dsh-desktop-hos/specs/202-plugin-fs-mutate/) —— `delete` / `move` / `copy` / `chmod` 壳专用插件的规格、方案与测试用例

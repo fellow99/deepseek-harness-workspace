@@ -1,8 +1,8 @@
 # skills/ —— 通用、可插拔的工具技能
 
-本目录存放**通用、可插拔**的 dsh 工具技能：它们**不依赖任何特定封装壳**的补丁、运行期环境或打包路径约定，因此可被任意一个壳（`deepseek-harness-desktop`、`deepseek-harness-harmony`，或未来的其它壳）直接采纳。
+本目录存放**通用、可插拔**的 dsh 工具技能：它们**不依赖任何特定封装壳**的补丁、运行期环境或打包路径约定，因此可被任意一个壳（`dsh-desktop`、`dsh-desktop-hos`，或未来的其它壳）直接采纳。
 
-> **本目录当前为空**（只有这份 README）。迄今唯一的技能是 `harmony-runtime-capabilities`，它描述的是 harmony 壳特有的运行期环境，属**壳专用技能**，位于 [`deepseek-harness-harmony/skills/`](../deepseek-harness-harmony/skills/)。
+> **本目录当前为空**（只有这份 README）。迄今唯一的技能是 `harmony-runtime-capabilities`，它描述的是 harmony 壳特有的运行期环境，属**壳专用技能**，位于 [`dsh-desktop-hos/skills/`](../dsh-desktop-hos/skills/)。
 
 ## 一、与封装工程 `skills/` 的分工
 
@@ -77,6 +77,6 @@ dsh 的技能发现规则（实现位于 `deepseek-harness` 的 `packages/skill/
 
 ## 六、相关文档
 
-- [`deepseek-harness-harmony/skills/README.md`](../deepseek-harness-harmony/skills/README.md) —— harmony 壳的专用技能目录约定
+- [`dsh-desktop-hos/skills/README.md`](../dsh-desktop-hos/skills/README.md) —— harmony 壳的专用技能目录约定
 - [`README.md`](../README.md) —— workspace 总说明的「Skill convention」节
 - [`dsh-plugins/README.md`](../dsh-plugins/README.md) —— 对应的**插件**两层约定（plugins 与 skills 是同一套分工思路）

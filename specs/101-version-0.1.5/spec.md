@@ -12,9 +12,9 @@
 ## 涉及工程
 - 父工程（deepseek-harness-workspace）
 - deepseek-harness
-- deepseek-harness-desktop
-- deepseek-harness-harmony
-- deepseek-harness-desktop-website
+- dsh-desktop
+- dsh-desktop-hos
+- dsh-desktop-website
 
 ## 背景
 上游 `deepseek-harness` 已发布 `dsh-v0.1.5-rc.2`（本地分支 `Branch_dsh-v0.1.5-rc.2` 已就绪）。
@@ -27,7 +27,7 @@
 - 使用本地已存在的分支 `Branch_dsh-v0.1.5-rc.2`，对应 tag `dsh-v0.1.5-rc.2`。
 - 不推新分支、不改动分支。
 
-### FR-2 deepseek-harness-desktop 子工程
+### FR-2 dsh-desktop 子工程
 - FR-2.1 清理所有中间文件、临时文件。
 - FR-2.2 基于 `dsh-v0.1.5-rc.2` 制作 patch（新增 `patches/dsh-v0.1.5-rc.2/` 并更新 `scripts/build-dsh.mjs` pin）。
 - FR-2.3 版本号设为 `0.1.5`。
@@ -38,7 +38,7 @@
 - FR-2.8 F11 切换全屏模式。
 - FR-2.9 去掉 Electron 默认菜单栏。
 
-### FR-3 deepseek-harness-harmony 子工程
+### FR-3 dsh-desktop-hos 子工程
 - FR-3.1 清理所有中间文件、临时文件。
 - FR-3.2 基于 `dsh-v0.1.5-rc.2` 制作 patch（新增 `patches/dsh-v0.1.5-rc.2/` 并更新 `scripts/build-dsh.mjs` pin）。
 - FR-3.3 版本号设为 `0.1.5`（`versionName=0.1.5`、`versionCode=1005`）。
@@ -48,7 +48,7 @@
 - FR-3.7 F11 切换全屏模式。
 - FR-3.8 去掉 Electron 默认菜单栏。
 
-### FR-4 deepseek-harness-desktop-website
+### FR-4 dsh-desktop-website
 - 版本文案由 `v0.1.2` / `dsh-v0.1.2-rc.1` 更新为 `v0.1.5` / `dsh-v0.1.5-rc.2`。
 
 ### FR-5 父工程
