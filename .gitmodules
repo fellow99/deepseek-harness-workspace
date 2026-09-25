@@ -1,18 +1,18 @@
 [submodule "dsh-market"]
 	path = dsh-market
 	url = https://github.com/dsh-market/dsh-market.git
-[submodule "deepseek-harness-desktop"]
-	path = deepseek-harness-desktop
-	url = https://github.com/fellow99/deepseek-harness-desktop.git
 [submodule "deepseek-harness"]
 	path = deepseek-harness
 	url = https://github.com/deepseek-ai/deepseek-harness.git
-[submodule "deepseek-harness-harmony"]
-	path = deepseek-harness-harmony
-	url = https://github.com/fellow99/deepseek-harness-harmony.git
 [submodule "harmonypc-electron"]
 	path = harmonypc-electron
 	url = https://github.com/fellow99/harmonypc-electron.git
-[submodule "deepseek-harness-desktop-website"]
-	path = deepseek-harness-desktop-website
-	url = https://github.com/fellow99/deepseek-harness-desktop-website.git
+[submodule "dsh-desktop"]
+	path = dsh-desktop
+	url = https://github.com/fellow99/dsh-desktop.git
+[submodule "dsh-desktop-hos"]
+	path = dsh-desktop-hos
+	url = https://github.com/fellow99/dsh-desktop-hos.git
+[submodule "dsh-desktop-website"]
+	path = dsh-desktop-website
+	url = https://github.com/fellow99/dsh-desktop-website.git
