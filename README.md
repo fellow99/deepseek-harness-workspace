@@ -84,11 +84,11 @@ A skill is either `<name>/SKILL.md` (directory bundle, may carry resources) or `
 
 | Project | Version | dsh version |
 |---|---|---|
-| `dsh-desktop` | **0.1.5** | `dsh-v0.1.5-rc.2` |
+| `dsh-desktop` | **0.1.7** | `dsh-v0.1.7-rc.2` |
 | `dsh-desktop-hos` | **0.1.5** | `dsh-v0.1.5-rc.2` |
-| `deepseek-harness` (submodule pin) | — | `dsh-v0.1.5-rc.2` |
+| `deepseek-harness` (submodule pin) | — | `dsh-v0.1.7-rc.2` |
 
-Both wrappers pin the same upstream dsh tag, which selects `patches/dsh-v0.1.5-rc.2/` in each project's
+Each wrapper pins its own upstream dsh tag, which selects the matching `patches/<dsh-tag>/` in each project's
 build script. When either wrapper advances, update this table together with the two product READMEs.
 
 ## Shared architecture
