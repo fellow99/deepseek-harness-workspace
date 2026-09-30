@@ -84,9 +84,9 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 
 | 工程 | 版本 | 对应 dsh 版本 |
 |---|---|---|
-| `dsh-desktop` | **0.1.7** | `dsh-v0.1.7-rc.2` |
-| `dsh-desktop-hos` | **0.1.5** | `dsh-v0.1.5-rc.2` |
-| `deepseek-harness`（submodule 固定版本） | — | `dsh-v0.1.7-rc.2` |
+| `dsh-desktop` | **0.2.0** | `dsh-v0.2.0-rc.2` |
+| `dsh-desktop-hos` | **0.2.0** | `dsh-v0.2.0-rc.2` |
+| `deepseek-harness`（submodule 固定版本） | — | `dsh-v0.2.0-rc.2` |
 
 两个封装工程按各自固定的上游 dsh tag，构建脚本据此选择对应的 `patches/<dsh-tag>/`。任一工程升级时，
 请同步更新本表与两个产品 README。
