@@ -59,7 +59,7 @@ debug 签名绑定设备 → 别人装不上；release 签名只能走 AppGaller
 
 ### ① 修死链、统一 CTA（30 分钟｜最高优先）
 
-**事实**：`fellow99/deepseek-harness-desktop` 与 `fellow99/deepseek-harness-harmony` 在 GitHub API 上都是 **404**（不是改名重定向，是查不到）。实际仓库是 `dsh-desktop` 与 `dsh-desktop-hos`，而《系列文章规划》里写的正是旧名。
+**事实**：`deepseek-harness-desktop` / `deepseek-harness-harmony` 是 **2026-09-25 改名前的工程名，从未作为 GitHub 仓库存在**（`fellow99/...` 一律 404、无重定向）。现行仓库是 `dsh-desktop` / `dsh-desktop-hos`。更麻烦的是：这两个名字现已被**别人的真实项目**占用（`anywhere-labs/deepseek-harness-desktop` 31k★、`hairyf/deepseek-harness-desktop`），所以文章里只写仓库名而不带 owner 时，读者会被导向竞品。
 
 - 动作：逐篇抽查已发布文章（desktop 2 篇 + harmony 已发篇）里的仓库链接；可编辑平台（知乎、掘金、简书、思否、开源中国、51CTO）统一到两个新仓库；公众号不便改就在下次发文时置顶修正。
 - 验收：逐篇点开全部 200，且落地到**有截图、有 Release、有兼容矩阵**的新 README。
@@ -152,7 +152,7 @@ debug 签名绑定设备 → 别人装不上；release 签名只能走 AppGaller
 
 | 项 | 核实结果 |
 |---|---|
-| `fellow99/deepseek-harness-desktop` · `-harmony` | **404**（旧名，文章里若出现即为死链） |
+| 旧工程名 `deepseek-harness-desktop` · `deepseek-harness-harmony` | **从未作为仓库存在**（404，无重定向）；名字现被 `anywhere-labs/`、`hairyf/` 两个真实项目占用 |
 | `fellow99/dsh-desktop` / `dsh-desktop-hos` | 0★ / 2★；后者 topics 缺 `dsh-plugin` |
 | 华为开发者社区 | `developer.huawei.com/consumer/cn/community` 可访问 |
 | 51CTO 鸿蒙社区 | `ost.51cto.com` 可访问 |
