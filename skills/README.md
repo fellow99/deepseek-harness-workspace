@@ -1,6 +1,6 @@
 # skills/ —— 通用、可插拔的工具技能
 
-本目录存放**通用、可插拔**的 dsh 工具技能：它们**不依赖任何特定封装壳**的补丁、运行期环境或打包路径约定，因此可被任意一个壳（`dsh-desktop`、`dsh-desktop-hos`，或未来的其它壳）直接采纳。
+本目录存放**通用、可插拔**的 dsh 工具技能：它们**不依赖任何特定封装壳**的补丁、运行期环境或打包路径约定，因此可被任意一个壳（`dsh-desktop`、`dsh-desktop-hos`、`dsh-desktop-ark`，或未来的其它壳）直接采纳。
 
 > **本目录当前为空**（只有这份 README）。迄今唯一的技能是 `harmony-runtime-capabilities`，它描述的是 harmony 壳特有的运行期环境，属**壳专用技能**，位于 [`dsh-desktop-hos/skills/`](../dsh-desktop-hos/skills/)。
 

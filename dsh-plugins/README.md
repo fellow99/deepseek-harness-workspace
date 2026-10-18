@@ -1,6 +1,6 @@
 # dsh-plugins/ —— 通用、可插拔插件
 
-本目录存放**通用、可插拔**的 dsh 插件：它们**不依赖任何特定封装壳**的补丁、profile 或运行期适配，因此可被任意一个壳（`dsh-desktop`、`dsh-desktop-hos`，或未来的其它壳）直接消费。
+本目录存放**通用、可插拔**的 dsh 插件：它们**不依赖任何特定封装壳**的补丁、profile 或运行期适配，因此可被任意一个壳（`dsh-desktop`、`dsh-desktop-hos`、`dsh-desktop-ark`，或未来的其它壳）直接消费。
 
 > **本目录当前为空**（只有这份 README）。迄今唯一的插件是 `delete` / `move` 文件工具，它依赖 harmony 壳独有的 `dsh-fs-remove-primitive` 补丁，属**壳专用插件**，已迁至 [`dsh-desktop-hos/plugins/harmony-plugin-fs-mutate/`](../dsh-desktop-hos/plugins/harmony-plugin-fs-mutate/)。
 
