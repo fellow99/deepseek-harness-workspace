@@ -40,3 +40,15 @@
 | R3 | 父 README 版本表 | dsh-desktop 0.2.1/dsh-v0.2.1-rc.2，hos 0.2.1/dsh-v0.2.1-rc.2 |
 | R4 | git 提交前缀 | 全部符合 Conventional Commits（git-commit 技能） |
 | R5 | 无敏感信息 | 补丁/提交/文档无 API KEY |
+
+## 五、执行结论（2026-10-18）
+
+| 组 | 结论 |
+|---|---|
+| D1–D6（dsh-desktop） | ✅ 全部通过：打包成功、3 补丁应用、版本 0.2.1、API KEY 保存成功、工作区 `ws-021` 创建、对话回复「收到。」 |
+| H1–H3（dsh-desktop-hos） | ✅ 通过：四阶段构建 `BUILD SUCCESSFUL`、13 补丁顺序应用、HAP `versionName 0.2.1 / versionCode 1009` |
+| H4–H7（dsh-desktop-hos） | ⏭️ 按用户决定跳过（设备不可见；不执行部署测试、不打 tag） |
+| W1–W4（dsh-desktop-website） | ✅ 通过：中英两页 4 处版本行均为 0.2.1，实际渲染无破图，验证声明如实 |
+| R1–R3（回归） | ✅ 通过：desktop 0.2.1 / HOS HAP 0.2.1·1009 / 父 README 版本表已同步 |
+| R4（提交前缀） | ✅ 通过：全部 Conventional Commits |
+| R5（无敏感信息） | ✅ 通过：补丁、提交、文档均无 API KEY |
