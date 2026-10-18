@@ -16,3 +16,9 @@
 [submodule "dsh-desktop-website"]
 	path = dsh-desktop-website
 	url = https://github.com/fellow99/dsh-desktop-website.git
+[submodule "ohos-node-bridge"]
+	path = ohos-node-bridge
+	url = https://github.com/fellow99/ohos-node-bridge.git
+[submodule "dsh-desktop-ark"]
+	path = dsh-desktop-ark
+	url = https://github.com/fellow99/dsh-desktop-ark.git
