@@ -13,16 +13,16 @@
 - [ ] T8 测试通过打 tag v0.2.1
 
 ## dsh-desktop-hos
-- [ ] T9 清理中间/临时构建文件
-- [ ] T10 新建 patches/dsh-v0.2.1-rc.2/（14 个：8 原样 + 6 重锚/重写，不含 symlink-to-copy）
-- [ ] T11 build-dsh.mjs patchDir pin → dsh-v0.2.1-rc.2（patchFiles 14 个不变）
-- [ ] T12 app.json5 versionName 0.2.1 / versionCode 1009
-- [ ] T13 git apply --check 校验 14 补丁
-- [ ] T14 编译构建（collect-runtime → build-dsh → collect-dsh → HAP）
-- [ ] T15 部署真机 + 功能测试：API KEY + 工作区 + 对话
+- [x] T9 清理中间/临时构建文件（.hvigor/build/dsh-dist）
+- [x] T10 新建 patches/dsh-v0.2.1-rc.2/（13 个：7 原样 + 6 重建/重锚，不含 symlink-to-copy）
+- [x] T11 build-dsh.mjs patchDir pin → dsh-v0.2.1-rc.2（patchFiles 13 个不变）
+- [x] T12 app.json5 versionName 0.2.1 / versionCode 1009
+- [x] T13 git apply --check 校验 13 补丁（顺序应用全通过）
+- [x] T14 编译构建（collect-runtime → build-dsh → collect-dsh → tar → HAP，BUILD SUCCESSFUL）
+- [ ] T15 部署真机 + 功能测试：API KEY + 工作区 + 对话（阻塞：设备未连接）
 
 ## dsh-desktop-website
-- [ ] T16 index.html / index_zh.html / README.md 版本串 → 0.2.1
+- [x] T16 index.html / index_zh.html / README.md 版本串 → 0.2.1
 
 ## 审查与收尾
 - [ ] T17 requesting-code-review 审查三处变更

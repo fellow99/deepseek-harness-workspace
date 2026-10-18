@@ -48,16 +48,16 @@ deepseek-harness 已由用户手动切换到本地分支 `Branch_dsh-v0.2.1-rc.2
 > 说明：构建链 `build:lib:client` / `build:web` 走 `tsc -b` + `tsdown`，不运行 vitest 单测；
 > 但为保持上游可构建/可测的一致性，welcome-notice 补丁仍同步维护 spec（与 0.2.0 做法一致）。
 
-### 3.2 dsh-desktop-hos（基线 dsh-v0.2.0-rc.2 → dsh-v0.2.1-rc.2，原 14 个补丁）
+### 3.2 dsh-desktop-hos（基线 dsh-v0.2.0-rc.2 → dsh-v0.2.1-rc.2，共 13 个补丁）
 
 | 补丁 | 目标文件 | 漂移 | 处置 |
 |---|---|---|---|
 | dsh-allow-all-interfaces | packages/bundle/web-app/src/startup.ts | 已变 | **重锚**（需核对 startup.ts 变更点） |
 | dsh-disable-native-picker | packages/host/directory-picker-auto/src/resolve.ts | 已变 | **重锚**（同 desktop §3.1） |
 | dsh-disable-welcome-notice | ui-settings-models/{index.ts, apply.client.spec.ts} | 已变 | **重锚**（同 desktop §3.1，hos 侧通常锚点更保守） |
-| dsh-rebrand | locale/{en,zh}.ts、ui-conversation locales、EmptyHero.tsx、FishLogo.tsx | 已变（4/5 文件） | **重写**：核对上游 rebrand 相关文案/组件变更，重做 4 文件；FishLogo.tsx 若未变则保留 |
+| dsh-rebrand | locale/{en,zh}.ts、ui-conversation locales、EmptyHero.tsx、FishLogo.tsx | 文件有改动，但补丁 hunk 未命中变更区 | **原样沿用**：实测精确锚点应用成功（实际核对：locales.ts:77,457 / EmptyHero.tsx / FishLogo.tsx） |
 | dsh-flock-openharmony | native/system/.../flock.ts | 未变 | 原样复制 |
-| dsh-hardlink-to-rename | session-persistence-jsonl/{generation,index,openharmony}.ts | 已变 | **重锚**（需核对 generation.ts / openharmony.ts 变更点） |
+| dsh-hardlink-to-rename | session-persistence-jsonl/{generation,index,openharmony}.ts | index.ts 有改动，generation/openharmony 未变 | **原样沿用**：实测精确锚点应用成功，三处 post-image 均在目标树中 |
 | dsh-fs-hardlink-fallback | packages/fs/fs-local/src/fsio.ts | 未变 | 原样复制 |
 | dsh-fs-remove-primitive | fs-local/{index,remove}.ts、fs-sandbox/index.ts、fs/{index,types}.ts | 未变 | 原样复制 |
 | dsh-fs-write-bytes | fs/{types,index}.ts、fs-local/{fsio,index}.ts、fs-sandbox/index.ts | 未变 | 原样复制 |
@@ -66,7 +66,7 @@ deepseek-harness 已由用户手动切换到本地分支 `Branch_dsh-v0.2.1-rc.2
 | dsh-attachment-durable-walk-sandbox | packages/attachment/attachment-local/src/store.ts | 未变 | 原样复制 |
 | dsh-fs-chmod-primitive | fs-local/chmod.ts、fs-local/index.ts、fs-sandbox/index.ts、fs/{index,types}.ts | 未变 | 原样复制 |
 
-> 最终 HOS 补丁数：14（与 0.2.0 一致：8 原样 + 6 重锚/重写）。
+> 最终 HOS 补丁数：**13**（7 原样 + 6 重建/重锚），与 0.2.0 的 13 个 .patch 一致（0.2.0 目录内第 14 项是 `REMOVE-dsh-symlink-to-copy.md` 说明文件，非补丁）。
 > 注意：dsh-symlink-to-copy 在 0.2.0 已被上游覆盖（见 `patches/dsh-v0.2.0-rc.2/REMOVE-dsh-symlink-to-copy.md`），0.2.1 继续不纳入。
 
 ## 4. 版本与构建产物

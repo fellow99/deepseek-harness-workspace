@@ -37,8 +37,8 @@
 ## 阶段 2 — dsh-desktop-hos
 
 1. 清理中间/临时文件（`.hvigor/`、`dsh-dist/`、`oh_modules/` 缓存等构建产物，保留源码与配置）。
-2. 新建 `patches/dsh-v0.2.1-rc.2/`（14 个，见 spec §3.2）：8 原样复制 + 6 重锚/重写（allow-all-interfaces、native-picker、welcome-notice、rebrand、hardlink-to-rename、lefthook）。**不含** dsh-symlink-to-copy（已移除）。
-3. `scripts/build-dsh.mjs`：`patchDir` → `patches/dsh-v0.2.1-rc.2`（patchFiles 列表不变，14 个）。
+2. 新建 `patches/dsh-v0.2.1-rc.2/`（13 个，见 spec §3.2）：7 原样复制 + 6 重建/重锚（allow-all-interfaces、native-picker、welcome-notice、rebrand、hardlink-to-rename、lefthook）。**不含** dsh-symlink-to-copy（已移除）。
+3. `scripts/build-dsh.mjs`：`patchDir` → `patches/dsh-v0.2.1-rc.2`（patchFiles 列表不变，13 个）。
 4. `AppScope/app.json5`：`versionName` → `0.2.1`，`versionCode` → `1009`。
 5. 校验补丁：`git -C deepseek-harness apply --check` 逐一通过。
 6. 编译构建：collect-runtime → build-dsh → collect-dsh → HAP build（hvigor）。
