@@ -19,3 +19,6 @@
 [submodule "dsh-desktop-ark"]
 	path = dsh-desktop-ark
 	url = https://github.com/fellow99/dsh-desktop-ark.git
+[submodule "dsh-desktop-android"]
+	path = dsh-desktop-android
+	url = https://github.com/fellow99/dsh-desktop-android.git
