@@ -4,17 +4,18 @@
 
 # DeepSeek Harness Workspace
 
-> 本仓库是一个聚合工程（workspace），把将 [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) 封装为一等桌面应用所需的全部工程汇聚到一处——Windows/Linux/macOS 走 Electron 桌面壳，鸿蒙端则分为**两个独立 edition**：**Electron on HarmonyOS Edition**（`dsh-desktop-hos`，保留 Electron 运行时）与 **HarmonyOS Edition**（`dsh-desktop-ark`，ArkWeb + 进程内 Node 运行时）。所有仓库均以 **git submodule** 形式固定版本，使本 workspace 的目录结构恰好还原各封装工程构建脚本所期望的兄弟目录布局（`../deepseek-harness`、`../dsh-market`、`../harmonypc-electron`）。
+> 本仓库是一个聚合工程（workspace），把将 [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) 封装为一等桌面应用所需的全部工程汇聚到一处——Windows/Linux/macOS 走 Electron 桌面壳，鸿蒙端分为**两个独立 edition**：**Electron on HarmonyOS Edition**（`dsh-desktop-hos`，保留 Electron 运行时）与 **HarmonyOS Edition**（`dsh-desktop-ark`，ArkWeb + 进程内 Node 运行时）；Android 端则由 `dsh-desktop-android`（系统 WebView + 进程内 Node 运行时）承接。所有仓库均以 **git submodule** 形式固定版本，使本 workspace 的目录结构恰好还原各封装工程构建脚本所期望的兄弟目录布局（`../deepseek-harness`、`../dsh-market`、`../harmonypc-electron`）。
 
 ---
 
 ## 这是什么
 
-DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的 Agent 运行框架（harness），采用"一切皆插件"架构；其原生入口是 `dsh web`（浏览器 Web UI）。三个姊妹封装工程将该 Web UI 变成原生桌面应用——完整复用 dsh 前端，并在进程内托管 dsh Host：
+DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的 Agent 运行框架（harness），采用"一切皆插件"架构；其原生入口是 `dsh web`（浏览器 Web UI）。四个姊妹封装工程将该 Web UI 变成原生应用——完整复用 dsh 前端，并在进程内托管 dsh Host：
 
 - **`dsh-desktop`** —— 面向 Windows / Linux / macOS 的 Electron 桌面壳
 - **`dsh-desktop-hos`** —— **Electron on HarmonyOS Edition**：鸿蒙移植版（2in1 / 平板，打包为 HAP），运行在 Electron-on-HarmonyOS 运行时之上
 - **`dsh-desktop-ark`** —— **HarmonyOS Edition**：同一个 dsh Host 跑在嵌入式 Node 运行时上，由系统 ArkWeb 渲染（不含 Electron、不打包 Chromium）
+- **`dsh-desktop-android`** —— **Android Edition**：同一个 dsh Host 跑在嵌入式 Node 运行时（libnode v24.22.1）上，由系统 WebView 渲染（APK）
 
 鸿蒙 Edition 背后的运行时构件已以 **ohpm 包** 形态发布到 OpenHarmony 三方库中心仓：**`@fellow99/node-bridge`** 是把真实 Node.js 运行时（`NAPI bootstrap + dlopen + node::Start`）嵌进应用自身进程的 ArkTS 组件库，**`@fellow99/node-runtime`** 则承载 `libnode.so` 引擎（版本号 = Node 版本，SHA-256 锁定）；`dsh-desktop-ark` 按常规 ohpm 依赖消费两者。三个封装工程消费完全相同的上游构件；本 workspace 正是承载这些构件（以 submodule 形式并列存放）的容器，各封装工程可以在一个地方完成克隆、构建与开发，其 `../兄弟目录` 引用在 workspace 内部即可解析。
 
@@ -25,6 +26,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 ├── dsh-desktop/          # [submodule] Electron 桌面封装（Windows/Linux/macOS）
 ├── dsh-desktop-hos/      # [submodule] Electron on HarmonyOS Edition（2in1/平板，HAP）
 ├── dsh-desktop-ark/      # [submodule] HarmonyOS Edition —— ArkWeb + 进程内 Node（HAP）
+├── dsh-desktop-android/ # [submodule] Android Edition —— 系统 WebView + 进程内 Node（APK）
 ├── deepseek-harness/                  # [submodule] dsh —— 被封装的 Agent 主机（上游）
 ├── dsh-market/                        # [submodule] 可视化插件市场（npm 包 "dshmarket"）
 ├── dsh-plugins/                       # （普通目录）通用、可共享的 dsh 插件 —— 一插件一目录，命名 dsh-plugin-XXX
@@ -40,8 +42,9 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 | `dsh-desktop` | Electron 桌面壳 —— 主封装工程 | — |
 | `dsh-desktop-hos` | **Electron on HarmonyOS Edition** —— 基于 Electron 运行时的鸿蒙移植版 | — |
 | `dsh-desktop-ark` | **HarmonyOS Edition** —— ArkWeb 壳 + 进程内 Node；不含 Electron | — |
-| `deepseek-harness` | 被封装的 Agent 主机（`dsh`，上游源码引用） | 三个封装工程 |
-| `dsh-market` | 内置可视化插件市场 | 三个封装工程 |
+| `dsh-desktop-android` | **Android Edition** —— 系统 WebView 壳 + 进程内 Node；不含 Electron | — |
+| `deepseek-harness` | 被封装的 Agent 主机（`dsh`，上游源码引用） | 全部封装工程 |
+| `dsh-market` | 内置可视化插件市场 | 全部封装工程 |
 | `dsh-plugins` | **通用、可共享**的 dsh 插件，一插件一目录，命名 `dsh-plugin-XXX`。目前除自身 README 外为空（见 [`dsh-plugins/README.md`](dsh-plugins/README.md)）；封装工程专用的插件放在各自工程内 | 任一封装工程 |
 | `skills` | **通用、可共享**的 dsh 工具技能，一技能一目录，功能性 kebab-case 名。目前除自身 README 外为空（见 [`skills/README.md`](skills/README.md)）；封装工程专用的技能放在各自工程内 | 任一封装工程 |
 | `harmonypc-electron` | Electron-on-HarmonyOS 运行时（原生 SO + ArkTS 桥接层） | 仅 `dsh-desktop-hos` |
@@ -88,7 +91,8 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 |---|---|---|
 | `dsh-desktop` | **0.2.1** | `dsh-v0.2.1-rc.2` |
 | `dsh-desktop-hos` | **0.2.1** | `dsh-v0.2.1-rc.2` |
-| `dsh-desktop-ark` | **0.1.0**（scaffold） | `dsh-v0.2.1-rc.2` |
+| `dsh-desktop-ark` | **0.2.1**（已真机验证） | `dsh-v0.2.1-rc.2` |
+| `dsh-desktop-android` | **0.1.0**（模拟器验证；真机复测待做） | `dsh-v0.2.1-rc.2` |
 | `deepseek-harness`（submodule 固定版本） | — | `dsh-v0.2.1-rc.2` |
 
 各封装工程按自身固定的上游 dsh tag，构建脚本据此选择对应的 `patches/<dsh-tag>/`。任一工程升级时，
@@ -96,7 +100,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 
 ## 共享架构
 
-`dsh` 已完成 **Host/Client 拆分**，其 Web 服务器**同时托管 SPA dist 与 `/api`**。因此三个封装工程采用相同的**进程内 Host + webserver + 同源数据面**方案：
+`dsh` 已完成 **Host/Client 拆分**，其 Web 服务器**同时托管 SPA dist 与 `/api`**。因此四个封装工程采用相同的**进程内 Host + webserver + 同源数据面**方案：
 
 - 封装工程在进程内托管 dsh Host（webserver + apiProxy + connection 统一绑定一个端口）：Electron 系封装在 Electron 的 Node 模式主进程中运行；HarmonyOS Edition 则在 ArkTS 应用进程内嵌的 Node 运行时上运行。
 - 就绪后，视图加载该 webserver，运行**未经修改的标准 dsh Web UI**，复用其既有 `WebApiClient`（HTTP 上行 + WebSocket 下行）。
@@ -104,13 +108,13 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 
 ### 各平台的差异适配
 
-| 方面 | 桌面端（Electron） | 鸿蒙端 · Electron on HarmonyOS Edition | HarmonyOS Edition（ArkWeb + Node） |
-|---|---|---|---|
-| 目标平台 | Windows / Linux / macOS | HarmonyOS 2in1 / 平板（HAP） | HarmonyOS 2in1 / 平板（HAP） |
-| 运行时 | Electron 43（随包） | Electron 37 on HarmonyOS（`harmonypc-electron`） | 系统 ArkWeb + Node v24.2.0（`@fellow99/node-runtime`，ohpm） |
-| Web 服务器绑定 | `127.0.0.1:<随机端口>` | `0.0.0.0:<随机端口>` + 局域网 IP + `Host`/`Origin` 改写（HarmonyOS 回环网络隔离） | `127.0.0.1:<随机端口>`（同源回环） |
-| dsh 补丁 | 3 个（禁用 HMR · 禁用原生目录选择器 · 关闭欢迎提示） | 13 个（flock 与硬链接回退 · `ctx.fs` remove / writeBytes / chmod · 追加可写根 · 附件 fsync · 品牌改写） | 0 个（profile/bundle + seam 插件 + 受审计垫片） |
-| 状态 | v0.2.1 —— 打包可用；托盘 / 通知 / 剪贴板 / 窗口状态 | v0.2.1 —— 已在 HarmonyOS 6.1.0.135（API 24）真机验证；终端 / 沙箱缺失 | v0.1.0 scaffold —— 编译打包通过（含运行时 44 MB HAP）；真机验证待做 |
+| 方面 | 桌面端（Electron） | 鸿蒙端 · Electron on HarmonyOS Edition | HarmonyOS Edition（ArkWeb + Node） | Android Edition（WebView + Node） |
+|---|---|---|---|---|
+| 目标平台 | Windows / Linux / macOS | HarmonyOS 2in1 / 平板（HAP） | HarmonyOS 2in1 / 平板（HAP） | Android 手机/平板（APK；arm64-v8a） |
+| 运行时 | Electron 43（随包） | Electron 37 on HarmonyOS（`harmonypc-electron`） | 系统 ArkWeb + Node v24.2.0（`@fellow99/node-runtime`，ohpm） | 系统 WebView + Node v24.22.1 small-icu（sha256 锁定 `libnode.so`） |
+| Web 服务器绑定 | `127.0.0.1:<随机端口>` | `0.0.0.0:<随机端口>` + 局域网 IP + `Host`/`Origin` 改写（HarmonyOS 回环网络隔离） | `127.0.0.1:<随机端口>`（同源回环） | `127.0.0.1:<随机端口>` + 一次性 `?token=` |
+| dsh 补丁 | 3 个（禁用 HMR · 禁用原生目录选择器 · 关闭欢迎提示） | 13 个（flock 与硬链接回退 · `ctx.fs` remove / writeBytes / chmod · 追加可写根 · 附件 fsync · 品牌改写） | 0 个（profile/bundle + seam 插件 + 受审计垫片） | 0 个（profile/bundle + seam 插件 + 物化期补丁 + 受审计垫片） |
+| 状态 | v0.2.1 —— 打包可用；托盘 / 通知 / 剪贴板 / 窗口状态 | v0.2.1 —— 已在 HarmonyOS 6.1.0.135（API 24）真机验证；终端 / 沙箱缺失 | v0.2.1 —— 真机验证；HAP ≈88 MB | v0.1.0 —— 模拟器验证（APK ≈135 MB）；真机回归待做 |
 
 ## 快速开始
 
@@ -137,6 +141,7 @@ git submodule update --init --recursive   # 拉取/刷新全部固定版本的 s
 | `dsh-desktop` | https://github.com/fellow99/dsh-desktop.git |
 | `dsh-desktop-hos` | https://github.com/fellow99/dsh-desktop-hos.git |
 | `dsh-desktop-ark` | https://github.com/fellow99/dsh-desktop-ark.git |
+| `dsh-desktop-android` | https://github.com/fellow99/dsh-desktop-android.git |
 | `deepseek-harness` | https://github.com/deepseek-ai/deepseek-harness.git |
 | `dsh-market` | https://github.com/dsh-market/dsh-market.git |
 | `harmonypc-electron` | https://atomgit.com/jianguoxu/harmonypc-electron.git |

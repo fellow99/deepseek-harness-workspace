@@ -4,17 +4,18 @@
 
 # DeepSeek Harness Workspace
 
-> A single-repo workspace aggregating every project required to ship [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) as a first-class desktop app — on Windows/Linux/macOS via an Electron shell, and on HarmonyOS through **two independent editions**: **Electron on HarmonyOS Edition** (`dsh-desktop-hos`, keeps the Electron runtime) and **HarmonyOS Edition** (`dsh-desktop-ark`, ArkWeb + an in-process Node runtime). All repositories are pinned as **git submodules** so the workspace layout reproduces the exact sibling-directory structure each wrapper's build scripts expect (`../deepseek-harness`, `../dsh-market`, `../harmonypc-electron`).
+> A single-repo workspace aggregating every project required to ship [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) as a first-class desktop app — on Windows/Linux/macOS via an Electron shell, on HarmonyOS through **two independent editions** (**Electron on HarmonyOS Edition** `dsh-desktop-hos`, which keeps the Electron runtime, and **HarmonyOS Edition** `dsh-desktop-ark`, ArkWeb + an in-process Node runtime), and on **Android** via `dsh-desktop-android` (system WebView + an in-process Node runtime). All repositories are pinned as **git submodules** so the workspace layout reproduces the exact sibling-directory structure each wrapper's build scripts expect (`../deepseek-harness`, `../dsh-market`, `../harmonypc-electron`).
 
 ---
 
 ## What is this
 
-DeepSeek Harness (`dsh`) is an open-source agent harness by DeepSeek AI, built on an "everything is a plugin" architecture; its native entry is `dsh web` (a browser Web UI). Three sibling wrapper projects turn that Web UI into native desktop apps — fully reusing the dsh frontend and hosting the dsh Host in-process:
+DeepSeek Harness (`dsh`) is an open-source agent harness by DeepSeek AI, built on an "everything is a plugin" architecture; its native entry is `dsh web` (a browser Web UI). Four sibling wrapper projects turn that Web UI into native apps — fully reusing the dsh frontend and hosting the dsh Host in-process:
 
 - **`dsh-desktop`** — an Electron desktop shell for Windows / Linux / macOS
 - **`dsh-desktop-hos`** — **Electron on HarmonyOS Edition**: a HarmonyOS port (2in1 / tablet, packaged as a HAP) running on the Electron-on-HarmonyOS runtime
 - **`dsh-desktop-ark`** — **HarmonyOS Edition**: the same dsh Host on an embedded Node runtime, rendered by the system ArkWeb (no Electron, no bundled Chromium)
+- **`dsh-desktop-android`** — **Android Edition**: the same dsh Host on an embedded Node runtime (libnode v24.22.1), rendered by the system WebView (APK)
 
 The runtime plumbing behind the HarmonyOS Edition is published as **ohpm packages** on the OpenHarmony central repository: **`@fellow99/node-bridge`** is the ArkTS component library that embeds a real Node.js runtime (`NAPI bootstrap + dlopen + node::Start`) inside the app's own process, and **`@fellow99/node-runtime`** ships the `libnode.so` engine (versioned = Node version, SHA-256-locked); `dsh-desktop-ark` consumes both as regular ohpm dependencies. All wrappers consume the same upstream building blocks; this workspace is the container that keeps those building blocks (as submodules) side by side, so every wrapper can be cloned, built, and developed in one place — with their `../sibling` references resolving inside the workspace.
 
@@ -25,6 +26,7 @@ deepseek-harness-workspace/            # this repo — submodule container
 ├── dsh-desktop/          # [submodule] Electron desktop wrapper (Windows/Linux/macOS)
 ├── dsh-desktop-hos/      # [submodule] Electron on HarmonyOS Edition (2in1/tablet, HAP)
 ├── dsh-desktop-ark/      # [submodule] HarmonyOS Edition — ArkWeb + in-process Node (HAP)
+├── dsh-desktop-android/ # [submodule] Android Edition — system WebView + in-process Node (APK)
 ├── deepseek-harness/                  # [submodule] dsh — the wrapped agent host (upstream)
 ├── dsh-market/                        # [submodule] visual plugin marketplace (npm pkg "dshmarket")
 ├── dsh-plugins/                       # (plain dir) generic, shareable dsh plugins — one dir per plugin, named dsh-plugin-XXX
@@ -41,6 +43,7 @@ deepseek-harness-workspace/            # this repo — submodule container
 | `dsh-desktop` | Electron desktop shell — the primary wrapper | — |
 | `dsh-desktop-hos` | **Electron on HarmonyOS Edition** — HarmonyOS port on the Electron runtime | — |
 | `dsh-desktop-ark` | **HarmonyOS Edition** — ArkWeb shell + in-process Node; no Electron | — |
+| `dsh-desktop-android` | **Android Edition** — system WebView shell + in-process Node; no Electron | — |
 | `deepseek-harness` | The wrapped agent host (`dsh`, upstream source reference) | all wrappers |
 | `dsh-market` | Built-in visual plugin marketplace | all wrappers |
 | `dsh-plugins` | **Generic, shareable** dsh plugins — one directory per plugin, named `dsh-plugin-XXX`. Currently empty but for its own README (see [`dsh-plugins/README.md`](dsh-plugins/README.md)); wrapper-specific plugins live inside their wrapper | any wrapper |
@@ -89,7 +92,8 @@ A skill is either `<name>/SKILL.md` (directory bundle, may carry resources) or `
 |---|---|---|
 | `dsh-desktop` | **0.2.1** | `dsh-v0.2.1-rc.2` |
 | `dsh-desktop-hos` | **0.2.1** | `dsh-v0.2.1-rc.2` |
-| `dsh-desktop-ark` | **0.1.0** (scaffold) | `dsh-v0.2.1-rc.2` |
+| `dsh-desktop-ark` | **0.2.1** (device-verified) | `dsh-v0.2.1-rc.2` |
+| `dsh-desktop-android` | **0.1.0** (emulator-verified; on-device pending) | `dsh-v0.2.1-rc.2` |
 | `deepseek-harness` (submodule pin) | — | `dsh-v0.2.1-rc.2` |
 
 Each wrapper pins its own upstream dsh tag, which selects the matching `patches/<dsh-tag>/` in each project's
@@ -105,13 +109,13 @@ build script. When any wrapper advances, update this table together with the pro
 
 ### Platform-specific adaptations
 
-| Aspect | Desktop (Electron) | HarmonyOS · Electron on HarmonyOS Edition | HarmonyOS Edition (ArkWeb + Node) |
-|---|---|---|---|
-| Target platforms | Windows / Linux / macOS | HarmonyOS 2in1 / tablet (HAP) | HarmonyOS 2in1 / tablet (HAP) |
-| Runtime | Electron 43 (bundled) | Electron 37 on HarmonyOS (`harmonypc-electron`) | System ArkWeb + Node v24.2.0 (`@fellow99/node-runtime`, ohpm) |
-| Webserver binding | `127.0.0.1:<free port>` | `0.0.0.0:<free port>` + LAN IP with `Host`/`Origin` rewrite (HarmonyOS loopback isolation) | `127.0.0.1:<free port>` (same-origin loopback) |
-| dsh patches | 3 (HMR off · native picker off · welcome notice off) | 13 (flock & hardlink fallbacks · `ctx.fs` remove / writeBytes / chmod · extra writable roots · attachment fsync · rebrand) | 0 (profile/bundle + seam plugins + audited shims) |
-| Status | v0.2.1 — packaging works; tray / notifications / clipboard / window state | v0.2.1 — device-verified on HarmonyOS 6.1.0.135 (API 24); terminal / sandbox out | v0.1.0 scaffold — compiles & packages (44 MB HAP with runtime); on-device verification pending |
+| Aspect | Desktop (Electron) | HarmonyOS · Electron on HarmonyOS Edition | HarmonyOS Edition (ArkWeb + Node) | Android Edition (WebView + Node) |
+|---|---|---|---|---|
+| Target platforms | Windows / Linux / macOS | HarmonyOS 2in1 / tablet (HAP) | HarmonyOS 2in1 / tablet (HAP) | Android phones/tablets (APK; arm64-v8a) |
+| Runtime | Electron 43 (bundled) | Electron 37 on HarmonyOS (`harmonypc-electron`) | System ArkWeb + Node v24.2.0 (`@fellow99/node-runtime`, ohpm) | System WebView + Node v24.22.1 small-icu (sha256-locked `libnode.so`) |
+| Webserver binding | `127.0.0.1:<free port>` | `0.0.0.0:<free port>` + LAN IP with `Host`/`Origin` rewrite (HarmonyOS loopback isolation) | `127.0.0.1:<free port>` (same-origin loopback) | `127.0.0.1:<free port>` + one-time `?token=` |
+| dsh patches | 3 (HMR off · native picker off · welcome notice off) | 13 (flock & hardlink fallbacks · `ctx.fs` remove / writeBytes / chmod · extra writable roots · attachment fsync · rebrand) | 0 (profile/bundle + seam plugins + audited shims) | 0 (profile/bundle + seam plugins + materialize-time patches + audited shims) |
+| Status | v0.2.1 — packaging works; tray / notifications / clipboard / window state | v0.2.1 — device-verified on HarmonyOS 6.1.0.135 (API 24); terminal / sandbox out | v0.2.1 — device-verified; ~88 MB HAP | v0.1.0 — emulator-verified (~135 MB APK); on-device regression pending |
 
 ## Getting started
 
@@ -138,6 +142,7 @@ All entries are recorded in [`.gitmodules`](.gitmodules):
 | `dsh-desktop` | https://github.com/fellow99/dsh-desktop.git |
 | `dsh-desktop-hos` | https://github.com/fellow99/dsh-desktop-hos.git |
 | `dsh-desktop-ark` | https://github.com/fellow99/dsh-desktop-ark.git |
+| `dsh-desktop-android` | https://github.com/fellow99/dsh-desktop-android.git |
 | `deepseek-harness` | https://github.com/deepseek-ai/deepseek-harness.git |
 | `dsh-market` | https://github.com/dsh-market/dsh-market.git |
 | `harmonypc-electron` | https://atomgit.com/jianguoxu/harmonypc-electron.git |
