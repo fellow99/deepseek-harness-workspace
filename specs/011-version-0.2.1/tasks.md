@@ -1,6 +1,6 @@
 # 任务清单 — 版本更新 0.2.1
 
-需求编号：101-version-0.2.1
+需求编号：011-version-0.2.1
 
 ## dsh-desktop
 - [x] T1 清理 out/ dsh-dist/ runtime/ .vite/ 中间临时文件

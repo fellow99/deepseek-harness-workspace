@@ -158,6 +158,15 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 - ArkWeb/WebView edition 不提供 workflow/ralph 与终端面板（无可 spawn 的 Node 辅助进程 / 无 node-pty）。
 - Electron on HarmonyOS Edition 因 AppGallery 上架合规要求不带 DeepSeek Harness 品牌标识。
 
+## 规范文档
+
+本 workspace 采用两级 as-built 规范文档：
+
+- **父工程** — [`specs/`](specs/)：整体架构、技术选型、宪法、整体规格/方案，以及公共 `0XX` 模块（`011-version-*`、`012-building-workflow`、`013-branding`）。
+- **各交付版本** — `dsh-desktop/specs/`、`dsh-desktop-hos/specs/`、`dsh-desktop-ark/specs/`、`dsh-desktop-android/specs/`：各自的基础 `1XX` 模块与插件 `2XX` 模块。
+
+模块编号即契约：`0XX` = 各子工程公共需求，`1XX` = 各工程基础功能（以 Android 为基准对齐），`2XX` = 补丁/插件。规则与父子工程文档分工见 [`specs/constitution.md`](specs/constitution.md)。
+
 ## 快速开始
 
 ```bash

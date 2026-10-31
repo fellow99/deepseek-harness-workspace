@@ -161,6 +161,15 @@ Notes:
 - workflow/ralph and the terminal panel are unavailable on the ArkWeb/WebView editions (no spawnable Node helper / no node-pty).
 - The Electron on HarmonyOS Edition ships without DeepSeek Harness branding per AppGallery listing compliance.
 
+## Specifications
+
+The workspace keeps a two-level as-built specification set:
+
+- **Parent** — [`specs/`](specs/): overall architecture, technology, constitution, overall spec/plan, plus shared `0XX` modules (`011-version-*`, `012-building-workflow`, `013-branding`).
+- **Each edition** — `dsh-desktop/specs/`, `dsh-desktop-hos/specs/`, `dsh-desktop-ark/specs/`, `dsh-desktop-android/specs/`: edition-specific `1XX` base modules and `2XX` plugin modules.
+
+Module numbers are contractual: `0XX` = shared requirements, `1XX` = edition base features aligned to the Android baseline, `2XX` = patches/plugins. See [`specs/constitution.md`](specs/constitution.md) for the rules and the parent/subproject documentation split.
+
 ## Getting started
 
 ```bash

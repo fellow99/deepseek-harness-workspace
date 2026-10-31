@@ -1,6 +1,6 @@
 # 实施计划 — 版本更新 0.2.0
 
-需求编号：101-version-0.2.0 ｜ 分支：不改动（dsh-desktop 打 tag 除外）
+需求编号：011-version-0.2.0 ｜ 分支：不改动（dsh-desktop 打 tag 除外）
 
 ## 执行顺序（严格串行，依赖关系）
 
@@ -61,6 +61,6 @@
 
 ## 工件
 
-- 规格：`specs/101-version-0.2.0/{spec,plan,tasks,test-cases}.md`
+- 规格：`specs/011-version-0.2.0/{spec,plan,tasks,test-cases}.md`
 - 日志：`dsh-desktop/logs/20260930-1/`（DEV_CHECKLIST、REVIEW_REPORT、TEST_REPORT）
 - 日志：`dsh-desktop-hos/logs/20260930-1/`
