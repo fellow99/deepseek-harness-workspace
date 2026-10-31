@@ -17,7 +17,7 @@ DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的 Agent 运行框架（harnes
 - **`dsh-desktop-ark`** —— **HarmonyOS Edition**：同一个 dsh Host 跑在嵌入式 Node 运行时上，由系统 ArkWeb 渲染（不含 Electron、不打包 Chromium）
 - **`dsh-desktop-android`** —— **Android Edition**：同一个 dsh Host 跑在嵌入式 Node 运行时（libnode v24.22.1）上，由系统 WebView 渲染（APK）
 
-鸿蒙 Edition 背后的运行时构件已以 **ohpm 包** 形态发布到 OpenHarmony 三方库中心仓：**`@fellow99/node-bridge`** 是把真实 Node.js 运行时（`NAPI bootstrap + dlopen + node::Start`）嵌进应用自身进程的 ArkTS 组件库，**`@fellow99/node-runtime`** 则承载 `libnode.so` 引擎（版本号 = Node 版本，SHA-256 锁定）；`dsh-desktop-ark` 按常规 ohpm 依赖消费两者。三个封装工程消费完全相同的上游构件；本 workspace 正是承载这些构件（以 submodule 形式并列存放）的容器，各封装工程可以在一个地方完成克隆、构建与开发，其 `../兄弟目录` 引用在 workspace 内部即可解析。
+鸿蒙 Edition 背后的运行时构件已以 **ohpm 包** 形态发布到 OpenHarmony 三方库中心仓：**`@fellow99/node-bridge`** 是把真实 Node.js 运行时（`NAPI bootstrap + dlopen + node::Start`）嵌进应用自身进程的 ArkTS 组件库，**`@fellow99/node-runtime`** 则承载 `libnode.so` 引擎（版本号 = Node 版本，SHA-256 锁定）；`dsh-desktop-ark` 按常规 ohpm 依赖消费两者。四个封装工程消费完全相同的上游构件；本 workspace 正是承载这些构件（以 submodule 形式并列存放）的容器，各封装工程可以在一个地方完成克隆、构建与开发，其 `../兄弟目录` 引用在 workspace 内部即可解析。
 
 ## 仓库布局
 
@@ -32,7 +32,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 ├── dsh-plugins/                       # （普通目录）通用、可共享的 dsh 插件 —— 一插件一目录，命名 dsh-plugin-XXX
 ├── skills/                            # （普通目录）通用、可共享的 dsh 工具技能 —— 一技能一目录，功能性 kebab-case 名
 ├── harmonypc-electron/                # [submodule] Electron-on-HarmonyOS 运行时（Electron 37 / Node 22.17.0）
-├── dsh-desktop-website/  # [submodule] 三个封装工程的产品官网
+├── dsh-desktop-website/  # [submodule] 四个 edition 的产品官网
 └── harmonypc-electron-versions/       # （普通目录，非 submodule）运行时发行版归档 + Electron 头文件指南
 
 ### 各角色一览
@@ -48,7 +48,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 | `dsh-plugins` | **通用、可共享**的 dsh 插件，一插件一目录，命名 `dsh-plugin-XXX`。目前除自身 README 外为空（见 [`dsh-plugins/README.md`](dsh-plugins/README.md)）；封装工程专用的插件放在各自工程内 | 任一封装工程 |
 | `skills` | **通用、可共享**的 dsh 工具技能，一技能一目录，功能性 kebab-case 名。目前除自身 README 外为空（见 [`skills/README.md`](skills/README.md)）；封装工程专用的技能放在各自工程内 | 任一封装工程 |
 | `harmonypc-electron` | Electron-on-HarmonyOS 运行时（原生 SO + ArkTS 桥接层） | 仅 `dsh-desktop-hos` |
-| `dsh-desktop-website` | 三个封装工程的产品官网 | — |
+| `dsh-desktop-website` | 四个 edition 的产品官网 | — |
 | `harmonypc-electron-versions` | Electron-on-HarmonyOS 发行版归档（v34/v37/v40）+ 用于重编译原生模块（如 `better-sqlite3`）的 Node 头文件指南 | harmony 工具链 |
 
 ### 插件约定
@@ -102,7 +102,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 
 `dsh` 已完成 **Host/Client 拆分**，其 Web 服务器**同时托管 SPA dist 与 `/api`**。因此四个封装工程采用相同的**进程内 Host + webserver + 同源数据面**方案：
 
-- 封装工程在进程内托管 dsh Host（webserver + apiProxy + connection 统一绑定一个端口）：Electron 系封装在 Electron 的 Node 模式主进程中运行；HarmonyOS Edition 则在 ArkTS 应用进程内嵌的 Node 运行时上运行。
+- 封装工程在进程内托管 dsh Host（webserver + apiProxy + connection 统一绑定一个端口）：Electron 系封装在 Electron 的 Node 模式主进程中运行；HarmonyOS Edition 与 Android Edition 则在应用进程内嵌的 Node 运行时上运行。
 - 就绪后，视图加载该 webserver，运行**未经修改的标准 dsh Web UI**，复用其既有 `WebApiClient`（HTTP 上行 + WebSocket 下行）。
 - 结果：**零 CORS、零鉴权、零自定义协议、零新增 IPC 载体 —— 上游零改动**（仅有幂等补丁）。
 
@@ -115,6 +115,48 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 | Web 服务器绑定 | `127.0.0.1:<随机端口>` | `0.0.0.0:<随机端口>` + 局域网 IP + `Host`/`Origin` 改写（HarmonyOS 回环网络隔离） | `127.0.0.1:<随机端口>`（同源回环） | `127.0.0.1:<随机端口>` + 一次性 `?token=` |
 | dsh 补丁 | 3 个（禁用 HMR · 禁用原生目录选择器 · 关闭欢迎提示） | 13 个（flock 与硬链接回退 · `ctx.fs` remove / writeBytes / chmod · 追加可写根 · 附件 fsync · 品牌改写） | 0 个（profile/bundle + seam 插件 + 受审计垫片） | 0 个（profile/bundle + seam 插件 + 物化期补丁 + 受审计垫片） |
 | 状态 | v0.2.1 —— 打包可用；托盘 / 通知 / 剪贴板 / 窗口状态 | v0.2.1 —— 已在 HarmonyOS 6.1.0.135（API 24）真机验证；终端 / 沙箱缺失 | v0.2.1 —— 真机验证；HAP ≈88 MB | v0.1.0 —— 模拟器验证（APK ≈135 MB）；真机回归待做 |
+
+## 能力对照清单
+
+四个 edition 的简化视图，功能项只显示图例。每一格均经各 edition 源码核实；完整 42 行、锚定源码的矩阵（含不一致项台账）见 [`docs/能力对照清单.md`](docs/能力对照清单.md)。
+
+**图例**：✅ 已核实可用 · 🟢 源码已交付（真机/端到端实证待补） · ⚠️ 受限/部分可用 · ❌ 无或已决策不做 · ⏸ 暂缓
+
+| 能力 | Desktop | Electron on HarmonyOS | HarmonyOS Edition | Android Edition |
+|---|---|---|---|---|
+| 读文件 / 列目录 / 写文件 | ✅ | ✅ | ✅ | ✅ |
+| 删除 / 移动 / 复制 / chmod | ✅ | ✅ | ❌ | 🟢 |
+| Shell 命令执行 | ✅ | ✅ | ⚠️ | 🟢 |
+| PTY / 终端面板 | ✅ | ❌ | ❌ | ❌ |
+| 内容搜索与 glob（ripgrep） | ✅ | ✅ | ❌ | ✅ |
+| web_search / web_fetch | ✅ | ✅ | ⚠️ | ✅ |
+| 文件导出 / 外发 | ✅ | ⚠️ | ⚠️ | 🟢 |
+| 后台任务 | ✅ | ⚠️ | ⚠️ | ✅ |
+| 子 agent | ✅ | ✅ | ⚠️ | ✅ |
+| todo / goal / present / 向用户提问 | ✅ | ✅ | ✅ | ✅ |
+| 技能（skill） | ✅ | ✅ | ⚠️ | ⚠️ |
+| workflow / ralph | ✅ | ❌ | ❌ | ❌ |
+| read_image | ✅ | ✅ | ✅ | ✅ |
+| 插件市场 | ✅ | ✅ | ✅ | 🟢 |
+| Git（21 工具） | ✅ | ✅ | ✅ | 🟢 |
+| 系统通知 | ✅ | ❌ | ⚠️ | 🟢 |
+| 剪贴板读图 / 写文本 | ✅ | ⚠️ | ⚠️ | 🟢 |
+| 外部打开链接 | ✅ | ❌ | ⚠️ | 🟢 |
+| 工作区目录选择器 | ✅ | ⚠️ | ✅ | ✅ |
+| 提权审批 | ✅ | ✅ | ⚠️ | ⚠️ |
+| 后台常驻 | ✅ | ⚠️ | ⚠️ | 🟢 |
+| 托盘 / 状态栏图标 | ✅ | ✅ | ❌ | ❌ |
+| 单实例 | ✅ | ❌ | ⚠️ | ✅ |
+| 窗口状态记忆 / 全屏 | ✅ | ✅ | ❌ | ❌ |
+| 进程级沙箱执行 | 🟢 | ❌ | ❌ | ❌ |
+| 开机自启 | ⏸ | ❌ | ❌ | ❌ |
+| DeepSeek Harness 品牌标识 | ✅ | ⚠️ | ✅ | ✅ |
+
+备注：
+
+- Android 当前为 v0.1.0：🟢 表示代码/模拟器实证已在，真机回归待补。
+- ArkWeb/WebView edition 不提供 workflow/ralph 与终端面板（无可 spawn 的 Node 辅助进程 / 无 node-pty）。
+- Electron on HarmonyOS Edition 因 AppGallery 上架合规要求不带 DeepSeek Harness 品牌标识。
 
 ## 快速开始
 

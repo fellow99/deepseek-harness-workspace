@@ -32,7 +32,7 @@ deepseek-harness-workspace/            # this repo — submodule container
 ├── dsh-plugins/                       # (plain dir) generic, shareable dsh plugins — one dir per plugin, named dsh-plugin-XXX
 ├── skills/                            # (plain dir) generic, shareable dsh tool skills — one dir per skill, kebab-case name
 ├── harmonypc-electron/                # [submodule] Electron-on-HarmonyOS runtime (Electron 37 / Node 22.17.0)
-├── dsh-desktop-website/  # [submodule] website of the three wrappers
+├── dsh-desktop-website/  # [submodule] product website for the four editions
 └── harmonypc-electron-versions/       # (plain dir, not a submodule) runtime release archives + Electron header guides
 ```
 
@@ -49,7 +49,7 @@ deepseek-harness-workspace/            # this repo — submodule container
 | `dsh-plugins` | **Generic, shareable** dsh plugins — one directory per plugin, named `dsh-plugin-XXX`. Currently empty but for its own README (see [`dsh-plugins/README.md`](dsh-plugins/README.md)); wrapper-specific plugins live inside their wrapper | any wrapper |
 | `skills` | **Generic, shareable** dsh tool skills — one directory per skill, kebab-case name. Currently empty but for its own README (see [`skills/README.md`](skills/README.md)); wrapper-specific skills live inside their wrapper | any wrapper |
 | `harmonypc-electron` | Electron-on-HarmonyOS runtime (native SOs + ArkTS bridge) | `dsh-desktop-hos` |
-| `dsh-desktop-website` | Product website of the three wrappers | — |
+| `dsh-desktop-website` | Product website for the four editions | — |
 | `harmonypc-electron-versions` | Electron-on-HarmonyOS release archives (v34/v37/v40) + Node-header guides for rebuilding native modules like `better-sqlite3` | harmony tooling |
 
 ### Plugin convention
@@ -103,7 +103,7 @@ build script. When any wrapper advances, update this table together with the pro
 
 `dsh` has completed its **Host/Client split**, and its webserver **serves both the SPA dist and `/api`**. All wrappers therefore use the same **in-process Host + webserver + same-origin data plane**:
 
-- The wrapper hosts the dsh Host in-process (webserver + apiProxy + connection, all on one bound port): the Electron wrappers run it in the Electron Node-mode main process; the HarmonyOS Edition runs it on an embedded Node runtime inside the ArkTS app process.
+- The wrapper hosts the dsh Host in-process (webserver + apiProxy + connection, all on one bound port): the Electron wrappers run it in the Electron Node-mode main process; the HarmonyOS and Android Editions run it on an embedded Node runtime inside the app process.
 - Once ready, the view loads that webserver and runs the **standard, unmodified dsh Web UI**, reusing its existing `WebApiClient` (HTTP uplink + WebSocket downlink).
 - Result: **zero CORS, zero auth, zero custom protocol, zero new IPC carrier — zero upstream changes**.
 
@@ -116,6 +116,50 @@ build script. When any wrapper advances, update this table together with the pro
 | Webserver binding | `127.0.0.1:<free port>` | `0.0.0.0:<free port>` + LAN IP with `Host`/`Origin` rewrite (HarmonyOS loopback isolation) | `127.0.0.1:<free port>` (same-origin loopback) | `127.0.0.1:<free port>` + one-time `?token=` |
 | dsh patches | 3 (HMR off · native picker off · welcome notice off) | 13 (flock & hardlink fallbacks · `ctx.fs` remove / writeBytes / chmod · extra writable roots · attachment fsync · rebrand) | 0 (profile/bundle + seam plugins + audited shims) | 0 (profile/bundle + seam plugins + materialize-time patches + audited shims) |
 | Status | v0.2.1 — packaging works; tray / notifications / clipboard / window state | v0.2.1 — device-verified on HarmonyOS 6.1.0.135 (API 24); terminal / sandbox out | v0.2.1 — device-verified; ~88 MB HAP | v0.1.0 — emulator-verified (~135 MB APK); on-device regression pending |
+
+## Capability matrix
+
+A simplified, icon-only view across the four editions. Every cell is verified
+against each edition's source code. The full 42-row, source-anchored matrix
+(with the discrepancy ledger) lives in [`docs/能力对照清单.md`](docs/能力对照清单.md).
+
+**Legend**: ✅ verified available · 🟢 shipped in source, device/E2E verification pending · ⚠️ limited/partial · ❌ unavailable or intentionally not built · ⏸ deferred
+
+| Capability | Desktop | Electron on HarmonyOS | HarmonyOS Edition | Android Edition |
+|---|---|---|---|---|
+| File read / list / write | ✅ | ✅ | ✅ | ✅ |
+| Delete / move / copy / chmod | ✅ | ✅ | ❌ | 🟢 |
+| Shell commands | ✅ | ✅ | ⚠️ | 🟢 |
+| PTY / terminal panel | ✅ | ❌ | ❌ | ❌ |
+| Search & glob (ripgrep) | ✅ | ✅ | ❌ | ✅ |
+| web_search / web_fetch | ✅ | ✅ | ⚠️ | ✅ |
+| File export / sharing | ✅ | ⚠️ | ⚠️ | 🟢 |
+| Background jobs | ✅ | ⚠️ | ⚠️ | ✅ |
+| Subagents | ✅ | ✅ | ⚠️ | ✅ |
+| todo / goal / present / ask user | ✅ | ✅ | ✅ | ✅ |
+| Skills | ✅ | ✅ | ⚠️ | ⚠️ |
+| workflow / ralph | ✅ | ❌ | ❌ | ❌ |
+| read_image | ✅ | ✅ | ✅ | ✅ |
+| Plugin marketplace | ✅ | ✅ | ✅ | 🟢 |
+| Git (21 tools) | ✅ | ✅ | ✅ | 🟢 |
+| System notifications | ✅ | ❌ | ⚠️ | 🟢 |
+| Clipboard image / text | ✅ | ⚠️ | ⚠️ | 🟢 |
+| Open external links | ✅ | ❌ | ⚠️ | 🟢 |
+| Workspace directory picker | ✅ | ⚠️ | ✅ | ✅ |
+| Escalation approval | ✅ | ✅ | ⚠️ | ⚠️ |
+| Background keep-alive | ✅ | ⚠️ | ⚠️ | 🟢 |
+| Tray / status-bar icon | ✅ | ✅ | ❌ | ❌ |
+| Single instance | ✅ | ❌ | ⚠️ | ✅ |
+| Window state / fullscreen | ✅ | ✅ | ❌ | ❌ |
+| Sandboxed process execution | 🟢 | ❌ | ❌ | ❌ |
+| Launch at login | ⏸ | ❌ | ❌ | ❌ |
+| DeepSeek Harness branding | ✅ | ⚠️ | ✅ | ✅ |
+
+Notes:
+
+- Android is v0.1.0: 🟢 marks source/emulator evidence that still awaits real-device regression.
+- workflow/ralph and the terminal panel are unavailable on the ArkWeb/WebView editions (no spawnable Node helper / no node-pty).
+- The Electron on HarmonyOS Edition ships without DeepSeek Harness branding per AppGallery listing compliance.
 
 ## Getting started
 
