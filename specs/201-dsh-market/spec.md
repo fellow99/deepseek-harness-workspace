@@ -161,3 +161,18 @@
 | 各壳状态 | `ark`：早已有 `assertMarketBuilt`（本模块 FR 来源）；`android`：本次补齐并验证；`hos`：`scripts/build-dsh.mjs` **构建期无条件 `npm run build`**（天然新鲜，不受影响）；`desktop`：构建期构建 |
 | 回归证据 | android 真机 MIX（Android 8.0/API26）重装后，设置→插件市场→「显示」不再 405（2026-11-01，See `dsh-desktop-android/logs/`） |
 | 预防 | 以 FR-201-020/021 固化：**产物落后于源码即构建失败**，禁止再产出缺路由的残包 |
+
+---
+
+## 11. 修复记录：插件安装失败（Android 无 `/tmp` → pnpm `temp-dir` ENOENT）
+
+| 项 | 内容 |
+|---|---|
+| 现象 | 设置 → 插件市场 → 点「安装」→「确认安装」，任务失败；市场只显示 `dsh-market-pnpm/dist/pnpm.cjs` 的 4 行栈尾（`createNewStoreController` → `pkg-manager/client` → `binary-fetcher`） |
+| 真实错误（host stderr） | `Error: ENOENT: no such file or directory, lstat '/tmp'`，位于 pnpm `temp-dir@2.0.0` 的**模块加载期** `realpathSync(os.tmpdir())` |
+| 根因 | **Android 没有 `/tmp`**；libnode 的 `os.tmpdir()` 回退到 `/tmp`，而 pnpm 在 `createNewStoreController`（store 初始化）时 eager require `fetching/binary-fetcher` → `tempy` → `temp-dir`，模块体即 `realpathSync(os.tmpdir())` → ENOENT → 整个 pnpm store 初始化失败 → 所有插件安装失败 |
+| 为何只有 android 复现 | 桌面/宿主有 `/tmp`（或 `%TEMP%`）；`hos`/`ark` 走各自引擎封装。Android 应用域无 `/tmp` |
+| 修复（android） | ① `packages/market-android/lib/pnpm-worker.mjs`：在 `import(pnpm)` **之前** `mkdir <profile>/.pnpm-cache/tmp` 并设置 `TMPDIR/TMP/TEMP` + 覆盖 `os.tmpdir()` 指向它；② 强制 `package-import-method=copy`（避开 reflink/hardlink 的 Android 原生/权限问题）；③ 装配期物化 `@reflink/reflink-android-arm64` 存根（防御下一层 reflink require）；④ `pnpm-inprocess.js` 失败时把**完整 worker stderr** 写入 host 日志（市场 UI 只保留栈尾、丢消息首行，导致此前无法定位） |
+| 各壳状态 | `ark`：其 pnpm worker 亦需保证 `os.tmpdir()` 可用（HarmonyOS 同样可能无 `/tmp`）——按本 FR 精神核对；`hos`：Electron/HarmonyOS 走各自链路；`desktop`：有系统 `/tmp`/`%TEMP%` 不受影响 |
+| 回归证据 | android 真机 MIX（API26）：安装 `dsh-unlag` 成功 → 落盘 `profiles/android/node_modules/dsh-unlag` → 卡片「✓ 已安装」、`已安装 (1)`（2026-11-01，见 `dsh-desktop-android/logs/20261101-1/evidence/45-market-install-success.png`） |
+| 预防 | 以「临时目录必须在 import pnpm 前就位」为装配/运行前置；`pnpm-inprocess` 失败时务必保留完整 stderr（诊断可观测性） |
