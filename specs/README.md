@@ -4,7 +4,7 @@
 **版本：** 工作区聚合（各子工程版本见下表）
 **技术栈：** Electron 43 / Electron-on-HarmonyOS 37 / ArkTS + ArkWeb / Kotlin + WebView；统一封装 deepseek-harness
 **文档生成时间：** 2026-11-01
-**最后更新：** 2026-11-01（按 0XX / 1XX / 2XX 编号规则整理）
+**最后更新：** 2026-11-01（按 0XX / 1XX / 2XX 编号规则整理；新增 2XX 跨壳插件模块 201/204/205）
 
 ---
 
@@ -14,7 +14,8 @@
 |------|------|---------|------|
 | 整体 | 项目级顶层文档 | 7 | 索引、结构、技术、架构、宪法、整体规格、整体方案 |
 | 模块 | 公共需求模块（0XX） | 20 | `011-version-*`（4 个版本）、`012-building-workflow`、`013-branding` |
-| **合计** | **7 根文件 / 6 模块目录 / 20 模块文件** | | |
+| 模块 | 跨壳插件模块（2XX） | 6 | `201-dsh-market`、`204-plugin-git`、`205-plugin-branding`（各 spec + plan） |
+| **合计** | **7 根文件 / 9 模块目录 / 26 模块文件** | | |
 
 > 按需求约定，父工程**不生成** `API.md`、`overall-api.md`、`overall-data-model.md`、`overall-test-cases.md`。
 > 编号规则见 [constitution.md](./constitution.md)：`0XX` = 各子工程公共需求，`1XX` = 各工程基础功能（以 android 为基准），`2XX` = 补丁/插件。
@@ -35,7 +36,7 @@
 
 ---
 
-## 三、公共需求模块（0XX）
+## 三、公共需求模块（0XX）与跨壳插件模块（2XX）
 
 ### 011 — 版本更新（版本需求）
 
@@ -69,6 +70,33 @@
 | 任务拆解 | [013-branding/tasks.md](./013-branding/tasks.md) | 跨工程任务核对 |
 | 测试用例 | [013-branding/test-cases.md](./013-branding/test-cases.md) | 四版品牌验收 |
 
+### 201 — dsh-market 插件市场（跨壳插件）
+
+> 四壳（desktop / hos / ark / android）内置 `dshmarket`：设置页「插件市场」装卸插件、进程内 pnpm 通道、产物新鲜度门禁（含 `sidebar entry: HTTP 405` 修复记录）。
+
+| 文档 | 链接 | 说明 |
+|------|------|------|
+| 功能规格 | [201-dsh-market/spec.md](./201-dsh-market/spec.md) | `FR-201-*` + 各壳差异矩阵 + §10 405 修复记录 |
+| 技术方案 | [201-dsh-market/plan.md](./201-dsh-market/plan.md) | 统一装配流水线、各壳落点、产物新鲜度门禁 |
+
+### 204 — GIT 插件（跨壳插件）
+
+> hos / ark / android 三壳：纯 JS `isomorphic-git` 交付 21 个 git 工具 + 凭据设置页；仓库根围栏与提权、路径双检、凭据 0600。
+
+| 文档 | 链接 | 说明 |
+|------|------|------|
+| 功能规格 | [204-plugin-git/spec.md](./204-plugin-git/spec.md) | `FR-204-*` + 三壳差异矩阵 |
+| 技术方案 | [204-plugin-git/plan.md](./204-plugin-git/plan.md) | 挂载平面、工具面、围栏/凭据、依赖物化 |
+
+### 205 — 品牌位（Web UI 内部 · 跨壳插件）
+
+> ark / android 两壳：侧栏品牌位、hero 品牌位、页面标题守卫；与 `013-branding`（应用级图标/名称）职责分离。
+
+| 文档 | 链接 | 说明 |
+|------|------|------|
+| 功能规格 | [205-plugin-branding/spec.md](./205-plugin-branding/spec.md) | `FR-205-*` + 与 013 边界 |
+| 技术方案 | [205-plugin-branding/plan.md](./205-plugin-branding/plan.md) | 两半体架构、`:has()` hero 规则、构建期门禁 |
+
 ---
 
 ## 四、各子工程版本与 specs 入口
@@ -91,6 +119,9 @@
 | 011 | 版本更新 | version | `011-version-0.1.5` ~ `0.2.1` | 父工程 |
 | 012 | 构建工作流 | building-workflow | `012-building-workflow` | desktop / android（hos/ark 暂无） |
 | 013 | 品牌化 | branding | `013-branding` | desktop / hos / ark / android |
+| 201 | dsh-market 插件市场 | dsh-market | `201-dsh-market` | desktop / hos / ark / android |
+| 204 | GIT 插件 | plugin-git | `204-plugin-git` | hos / ark / android |
+| 205 | 品牌位（Web UI 内部） | plugin-branding | `205-plugin-branding` | ark / android |
 
 > 子工程 1XX/2XX 模块不在此重复；完整映射见 [STRUCTURE.md](./STRUCTURE.md) §5。
 

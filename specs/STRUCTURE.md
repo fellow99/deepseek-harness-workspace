@@ -189,11 +189,11 @@ specs/
 | 117 | — | — | `117-runtime-provisioning` | — | — |
 | 118 | — | `118-preload-bridge` | — | — | — |
 | 119 | — | — | — | `119-jitless` | — |
-| 201 | — | `201-dsh-market` | `201-dsh-market` | `201-dsh-market` | `201-dsh-market` |
+| 201 | `201-dsh-market` | `201-dsh-market` | `201-dsh-market` | `201-dsh-market` | `201-dsh-market` |
 | 202 | — | — | `202-plugin-fs-mutate` | — | — |
 | 203 | — | — | `203-plugin-workspace-picker` | — | — |
-| 204 | — | — | `204-plugin-git` | `204-plugin-git` | `204-plugin-git` |
-| 205 | — | — | — | `205-plugin-branding` | `205-plugin-branding` |
+| 204 | `204-plugin-git` | — | `204-plugin-git` | `204-plugin-git` | `204-plugin-git` |
+| 205 | `205-plugin-branding` | — | — | `205-plugin-branding` | `205-plugin-branding` |
 | 206 | — | — | — | — | `206-plugin-fs-search` |
 | 301 | — | — | `301-skill-runtime-capabilities` | — | — |
 
