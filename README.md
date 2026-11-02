@@ -15,7 +15,7 @@ DeepSeek Harness (`dsh`) is an open-source agent harness by DeepSeek AI, built o
 - **`dsh-desktop`** — an Electron desktop shell for Windows / Linux / macOS
 - **`dsh-desktop-hos`** — **Electron on HarmonyOS Edition**: a HarmonyOS port (2in1 / tablet, packaged as a HAP) running on the Electron-on-HarmonyOS runtime
 - **`dsh-desktop-ark`** — **HarmonyOS Edition**: the same dsh Host on an embedded Node runtime, rendered by the system ArkWeb (no Electron, no bundled Chromium)
-- **`dsh-desktop-android`** — **Android Edition**: the same dsh Host on an embedded Node runtime (libnode v24.22.1), rendered by the system WebView (APK)
+- **`dsh-desktop-android`** — **Android Edition**: the same dsh Host on an embedded Node runtime (libnode v26.13.0), rendered by the system WebView (APK)
 
 The runtime plumbing behind the HarmonyOS Edition is published as **ohpm packages** on the OpenHarmony central repository: **`@fellow99/node-bridge`** is the ArkTS component library that embeds a real Node.js runtime (`NAPI bootstrap + dlopen + node::Start`) inside the app's own process, and **`@fellow99/node-runtime`** ships the `libnode.so` engine (versioned = Node version, SHA-256-locked); `dsh-desktop-ark` consumes both as regular ohpm dependencies. All wrappers consume the same upstream building blocks; this workspace is the container that keeps those building blocks (as submodules) side by side, so every wrapper can be cloned, built, and developed in one place — with their `../sibling` references resolving inside the workspace.
 
@@ -90,11 +90,11 @@ A skill is either `<name>/SKILL.md` (directory bundle, may carry resources) or `
 
 | Project | Version | dsh version |
 |---|---|---|
-| `dsh-desktop` | **0.2.1** | `dsh-v0.2.1-rc.2` |
-| `dsh-desktop-hos` | **0.2.1** | `dsh-v0.2.1-rc.2` |
-| `dsh-desktop-ark` | **0.2.1** (device-verified) | `dsh-v0.2.1-rc.2` |
-| `dsh-desktop-android` | **0.1.0** (emulator-verified; on-device pending) | `dsh-v0.2.1-rc.2` |
-| `deepseek-harness` (submodule pin) | — | `dsh-v0.2.1-rc.2` |
+| `dsh-desktop` | **0.2.1** | `dsh-v0.2.1-rc.5` |
+| `dsh-desktop-hos` | **0.2.1** | `dsh-v0.2.1-rc.5` |
+| `dsh-desktop-ark` | **0.2.1** (device-verified) | `dsh-v0.2.1-rc.5` |
+| `dsh-desktop-android` | **0.2.1** (real-device verified 2026-11-02) | `dsh-v0.2.1-rc.5` |
+| `deepseek-harness` (submodule pin) | — | `dsh-v0.2.1-rc.5` |
 
 Each wrapper pins its own upstream dsh tag, which selects the matching `patches/<dsh-tag>/` in each project's
 build script. When any wrapper advances, update this table together with the product READMEs.
@@ -112,10 +112,10 @@ build script. When any wrapper advances, update this table together with the pro
 | Aspect | Desktop (Electron) | HarmonyOS · Electron on HarmonyOS Edition | HarmonyOS Edition (ArkWeb + Node) | Android Edition (WebView + Node) |
 |---|---|---|---|---|
 | Target platforms | Windows / Linux / macOS | HarmonyOS 2in1 / tablet (HAP) | HarmonyOS 2in1 / tablet (HAP) | Android phones/tablets (APK; arm64-v8a) |
-| Runtime | Electron 43 (bundled) | Electron 37 on HarmonyOS (`harmonypc-electron`) | System ArkWeb + Node v24.2.0 (`@fellow99/node-runtime`, ohpm) | System WebView + Node v24.22.1 small-icu (sha256-locked `libnode.so`) |
+| Runtime | Electron 43 (bundled) | Electron 37 on HarmonyOS (`harmonypc-electron`) | System ArkWeb + Node v24.2.0 (`@fellow99/node-runtime`, ohpm) | System WebView + Node v26.13.0 small-icu (sha256-locked `libnode.so`) |
 | Webserver binding | `127.0.0.1:<free port>` | `0.0.0.0:<free port>` + LAN IP with `Host`/`Origin` rewrite (HarmonyOS loopback isolation) | `127.0.0.1:<free port>` (same-origin loopback) | `127.0.0.1:<free port>` + one-time `?token=` |
 | dsh patches | 3 (HMR off · native picker off · welcome notice off) | 13 (flock & hardlink fallbacks · `ctx.fs` remove / writeBytes / chmod · extra writable roots · attachment fsync · rebrand) | 0 (profile/bundle + seam plugins + audited shims) | 0 (profile/bundle + seam plugins + materialize-time patches + audited shims) |
-| Status | v0.2.1 — packaging works; tray / notifications / clipboard / window state | v0.2.1 — device-verified on HarmonyOS 6.1.0.135 (API 24); terminal / sandbox out | v0.2.1 — device-verified; ~88 MB HAP | v0.1.0 — emulator-verified (~135 MB APK); on-device regression pending |
+| Status | v0.2.1 — packaging works; tray / notifications / clipboard / window state | v0.2.1 — built (HAP 0.2.1/1009, dsh rc.5); on-device re-verification pending | v0.2.1 — built (HAP 0.2.1/201, dsh rc.5); device-verified on HarmonyOS 6.1.0.135 (API 24) | v0.2.1 — built (APK 0.2.1/201, dsh rc.5); real-device verified 2026-11-02 |
 
 ## Capability matrix
 
@@ -157,7 +157,7 @@ against each edition's source code. The full 42-row, source-anchored matrix
 
 Notes:
 
-- Android is v0.1.0: 🟢 marks source/emulator evidence that still awaits real-device regression.
+- Android is v0.2.1: real-device verified 2026-11-02 (functional + end-side capability self-check 13/14); a few 🟢 cells (e.g. market E2E) still await closure.
 - workflow/ralph and the terminal panel are unavailable on the ArkWeb/WebView editions (no spawnable Node helper / no node-pty).
 - The Electron on HarmonyOS Edition ships without DeepSeek Harness branding per AppGallery listing compliance.
 
