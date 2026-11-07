@@ -131,6 +131,7 @@ against each edition's source code. The full 42-row, source-anchored matrix
 | Delete / move / copy / chmod | ✅ | ✅ | ❌ | 🟢 |
 | Shell commands | ✅ | ✅ | ⚠️ | 🟢 |
 | PTY / terminal panel | ✅ | ❌ | ❌ | ❌ |
+| Terminal commands (usable CLI set) | ✅ (full host-OS CLI: bash/zsh/PowerShell, git/curl/python/…) | 🟢 (resident mksh + toybox set) | ⚠️ (exec in tree, EACCES pending) | 🟢 (resident mksh + bundled CLI git/node/npm/pnpm/python/pip/uv + built-in toybox/awk/curl/pm/getprop/logcat) |
 | Search & glob (ripgrep) | ✅ | ✅ | ❌ | ✅ |
 | web_search / web_fetch | ✅ | ✅ | ⚠️ | ✅ |
 | File export / sharing | ✅ | ⚠️ | ⚠️ | 🟢 |
@@ -141,7 +142,7 @@ against each edition's source code. The full 42-row, source-anchored matrix
 | workflow / ralph | ✅ | ❌ | ❌ | ❌ |
 | read_image | ✅ | ✅ | ✅ | ✅ |
 | Plugin marketplace | ✅ | ✅ | ✅ | 🟢 |
-| Git (21 tools) | ✅ | ✅ | ✅ | 🟢 |
+| Git | ✅ | ✅ | ✅ | 🟢 |
 | System notifications | ✅ | ❌ | ⚠️ | 🟢 |
 | Clipboard image / text | ✅ | ⚠️ | ⚠️ | 🟢 |
 | Open external links | ✅ | ❌ | ⚠️ | 🟢 |

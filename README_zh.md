@@ -128,6 +128,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 | 删除 / 移动 / 复制 / chmod | ✅ | ✅ | ❌ | 🟢 |
 | Shell 命令执行 | ✅ | ✅ | ⚠️ | 🟢 |
 | PTY / 终端面板 | ✅ | ❌ | ❌ | ❌ |
+| 终端命令（可用命令集） | ✅ 全功能系统环境（bash/zsh/PowerShell、git/curl/python/…） | 🟢 常驻 mksh + toybox 命令集（[toybox命令清单](../dsh-desktop-hos/docs/toybox命令清单.md)） | ⚠️ 命令执行在册、EACCES 待修 | 🟢 常驻 mksh + 预置 CLI（git/node/npm/pnpm/python/pip/uv）+ 系统内置（toybox/awk/curl/pm/getprop/logcat），详见[安卓常规终端命令](../dsh-desktop-android/docs/安卓常规终端命令.md) |
 | 内容搜索与 glob（ripgrep） | ✅ | ✅ | ❌ | ✅ |
 | web_search / web_fetch | ✅ | ✅ | ⚠️ | ✅ |
 | 文件导出 / 外发 | ✅ | ⚠️ | ⚠️ | 🟢 |
@@ -138,7 +139,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 | workflow / ralph | ✅ | ❌ | ❌ | ❌ |
 | read_image | ✅ | ✅ | ✅ | ✅ |
 | 插件市场 | ✅ | ✅ | ✅ | 🟢 |
-| Git（21 工具） | ✅ | ✅ | ✅ | 🟢 |
+| Git | ✅ | ✅ | ✅ | 🟢 |
 | 系统通知 | ✅ | ❌ | ⚠️ | 🟢 |
 | 剪贴板读图 / 写文本 | ✅ | ⚠️ | ⚠️ | 🟢 |
 | 外部打开链接 | ✅ | ❌ | ⚠️ | 🟢 |
