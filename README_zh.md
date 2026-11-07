@@ -15,7 +15,7 @@ DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的 Agent 运行框架（harnes
 - **`dsh-desktop`** —— 面向 Windows / Linux / macOS 的 Electron 桌面壳
 - **`dsh-desktop-hos`** —— **Electron on HarmonyOS Edition**：鸿蒙移植版（2in1 / 平板，打包为 HAP），运行在 Electron-on-HarmonyOS 运行时之上
 - **`dsh-desktop-ark`** —— **HarmonyOS Edition**：同一个 dsh Host 跑在嵌入式 Node 运行时上，由系统 ArkWeb 渲染（不含 Electron、不打包 Chromium）
-- **`dsh-desktop-android`** —— **Android Edition**：同一个 dsh Host 跑在嵌入式 Node 运行时（libnode v26.13.0）上，由系统 WebView 渲染（APK）
+- **`dsh-desktop-android`** —— **Android Edition**：同一个 dsh Host 跑在嵌入式 Node 运行时（libnode v26.13.0）上，由系统 WebView 渲染（APK）。重点能力：**全功能 PTY 终端（node-pty）**、**预置 CLI**（node / python / git / uv / pnpm ＋ npm / npx / corepack / pip）、**系统内置命令**（toybox · awk/sed/tr · tar/gzip · sha256sum · curl · ping · pm · getprop · logcat）；详见 [dsh-desktop-android/docs/安卓常规终端命令.md](dsh-desktop-android/docs/安卓常规终端命令.md)
 
 鸿蒙 Edition 背后的运行时构件已以 **ohpm 包** 形态发布到 OpenHarmony 三方库中心仓：**`@fellow99/node-bridge`** 是把真实 Node.js 运行时（`NAPI bootstrap + dlopen + node::Start`）嵌进应用自身进程的 ArkTS 组件库，**`@fellow99/node-runtime`** 则承载 `libnode.so` 引擎（版本号 = Node 版本，SHA-256 锁定）；`dsh-desktop-ark` 按常规 ohpm 依赖消费两者。四个封装工程消费完全相同的上游构件；本 workspace 正是承载这些构件（以 submodule 形式并列存放）的容器，各封装工程可以在一个地方完成克隆、构建与开发，其 `../兄弟目录` 引用在 workspace 内部即可解析。
 
