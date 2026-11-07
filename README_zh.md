@@ -89,11 +89,11 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 
 | 工程 | 版本 | 对应 dsh 版本 |
 |---|---|---|
-| `dsh-desktop` | **0.2.1** | `dsh-v0.2.1-rc.5` |
-| `dsh-desktop-hos` | **0.2.1** | `dsh-v0.2.1-rc.5` |
-| `dsh-desktop-ark` | **0.2.1**（已真机验证） | `dsh-v0.2.1-rc.5` |
-| `dsh-desktop-android` | **0.2.1**（2026-11-02 真机验证） | `dsh-v0.2.1-rc.5` |
-| `deepseek-harness`（submodule 固定版本） | — | `dsh-v0.2.1-rc.5` |
+| `dsh-desktop` | **0.2.2** | `dsh-v0.2.2-rc.1` |
+| `dsh-desktop-hos` | **0.2.2** | `dsh-v0.2.2-rc.1` |
+| `dsh-desktop-ark` | **0.2.2**（已构建；真机验证待做） | `dsh-v0.2.2-rc.1` |
+| `dsh-desktop-android` | **0.2.2**（已构建；0.2.2 真机验证进行中） | `dsh-v0.2.2-rc.1` |
+| `deepseek-harness`（submodule 固定版本） | — | `dsh-v0.2.2-rc.1` |
 
 各封装工程按自身固定的上游 dsh tag，构建脚本据此选择对应的 `patches/<dsh-tag>/`。任一工程升级时，
 请同步更新本表与各产品 README。
@@ -111,10 +111,10 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 | 方面 | 桌面端（Electron） | 鸿蒙端 · Electron on HarmonyOS Edition | HarmonyOS Edition（ArkWeb + Node） | Android Edition（WebView + Node） |
 |---|---|---|---|---|
 | 目标平台 | Windows / Linux / macOS | HarmonyOS 2in1 / 平板（HAP） | HarmonyOS 2in1 / 平板（HAP） | Android 手机/平板（APK；arm64-v8a） |
-| 运行时 | Electron 43（随包） | Electron 37 on HarmonyOS（`harmonypc-electron`） | 系统 ArkWeb + Node v24.2.0（`@fellow99/node-runtime`，ohpm） | 系统 WebView + Node v26.13.0 small-icu（sha256 锁定 `libnode.so`） |
+| 运行时 | Electron 43（随包） | Electron 37 on HarmonyOS（`harmonypc-electron`） | 系统 ArkWeb + Node v26.13.0（`@fellow99/node-runtime`，ohpm） | 系统 WebView + Node v26.13.0 small-icu（sha256 锁定 `libnode.so`） |
 | Web 服务器绑定 | `127.0.0.1:<随机端口>` | `0.0.0.0:<随机端口>` + 局域网 IP + `Host`/`Origin` 改写（HarmonyOS 回环网络隔离） | `127.0.0.1:<随机端口>`（同源回环） | `127.0.0.1:<随机端口>` + 一次性 `?token=` |
 | dsh 补丁 | 3 个（禁用 HMR · 禁用原生目录选择器 · 关闭欢迎提示） | 13 个（flock 与硬链接回退 · `ctx.fs` remove / writeBytes / chmod · 追加可写根 · 附件 fsync · 品牌改写） | 0 个（profile/bundle + seam 插件 + 受审计垫片） | 0 个（profile/bundle + seam 插件 + 物化期补丁 + 受审计垫片） |
-| 状态 | v0.2.1 —— 打包可用；托盘 / 通知 / 剪贴板 / 窗口状态 | v0.2.1 —— 已构建（HAP 0.2.1/1009，dsh rc.5）；真机复验待做 | v0.2.1 —— 已构建（HAP 0.2.1/201，dsh rc.5）；已在 HarmonyOS 6.1.0.135（API 24）真机验证 | v0.2.1 —— 已构建（APK 0.2.1/201，dsh rc.5）；2026-11-02 真机验证 |
+| 状态 | v0.2.2 —— 打包可用；托盘 / 通知 / 剪贴板 / 窗口状态 | v0.2.2 —— 已构建（HAP 0.2.2/1100，dsh rc.1）；真机复验待做 | v0.2.2 —— 已构建（HAP 0.2.2/202，dsh rc.1）；0.2.1 已在 HarmonyOS 6.1.0.135（API 24）真机验证 | v0.2.2 —— 已构建（APK 0.2.2/202，dsh rc.1）；0.2.2 真机验证进行中 |
 
 ## 能力对照清单
 
@@ -155,7 +155,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 
 备注：
 
-- Android 当前为 v0.2.1：2026-11-02 已真机验证（功能 + 端侧环境能力自检 13/14）；个别 🟢（如市场 E2E）仍待闭环。
+- Android 当前为 v0.2.2：已构建（0.2.2 真机验证进行中；0.2.1 已于 2026-11-02 真机验证，功能 + 端侧环境能力自检 13/14）；个别 🟢（如市场 E2E）仍待闭环。
 - ArkWeb/WebView edition 不提供 workflow/ralph 与终端面板（无可 spawn 的 Node 辅助进程 / 无 node-pty）。
 - Electron on HarmonyOS Edition 因 AppGallery 上架合规要求不带 DeepSeek Harness 品牌标识。
 

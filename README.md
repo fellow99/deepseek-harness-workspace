@@ -90,11 +90,11 @@ A skill is either `<name>/SKILL.md` (directory bundle, may carry resources) or `
 
 | Project | Version | dsh version |
 |---|---|---|
-| `dsh-desktop` | **0.2.1** | `dsh-v0.2.1-rc.5` |
-| `dsh-desktop-hos` | **0.2.1** | `dsh-v0.2.1-rc.5` |
-| `dsh-desktop-ark` | **0.2.1** (device-verified) | `dsh-v0.2.1-rc.5` |
-| `dsh-desktop-android` | **0.2.1** (real-device verified 2026-11-02) | `dsh-v0.2.1-rc.5` |
-| `deepseek-harness` (submodule pin) | — | `dsh-v0.2.1-rc.5` |
+| `dsh-desktop` | **0.2.2** | `dsh-v0.2.2-rc.1` |
+| `dsh-desktop-hos` | **0.2.2** | `dsh-v0.2.2-rc.1` |
+| `dsh-desktop-ark` | **0.2.2** (built; on-device verification pending) | `dsh-v0.2.2-rc.1` |
+| `dsh-desktop-android` | **0.2.2** (built; 0.2.2 on-device verification in progress) | `dsh-v0.2.2-rc.1` |
+| `deepseek-harness` (submodule pin) | — | `dsh-v0.2.2-rc.1` |
 
 Each wrapper pins its own upstream dsh tag, which selects the matching `patches/<dsh-tag>/` in each project's
 build script. When any wrapper advances, update this table together with the product READMEs.
@@ -112,10 +112,10 @@ build script. When any wrapper advances, update this table together with the pro
 | Aspect | Desktop (Electron) | HarmonyOS · Electron on HarmonyOS Edition | HarmonyOS Edition (ArkWeb + Node) | Android Edition (WebView + Node) |
 |---|---|---|---|---|
 | Target platforms | Windows / Linux / macOS | HarmonyOS 2in1 / tablet (HAP) | HarmonyOS 2in1 / tablet (HAP) | Android phones/tablets (APK; arm64-v8a) |
-| Runtime | Electron 43 (bundled) | Electron 37 on HarmonyOS (`harmonypc-electron`) | System ArkWeb + Node v24.2.0 (`@fellow99/node-runtime`, ohpm) | System WebView + Node v26.13.0 small-icu (sha256-locked `libnode.so`) |
+| Runtime | Electron 43 (bundled) | Electron 37 on HarmonyOS (`harmonypc-electron`) | System ArkWeb + Node v26.13.0 (`@fellow99/node-runtime`, ohpm) | System WebView + Node v26.13.0 small-icu (sha256-locked `libnode.so`) |
 | Webserver binding | `127.0.0.1:<free port>` | `0.0.0.0:<free port>` + LAN IP with `Host`/`Origin` rewrite (HarmonyOS loopback isolation) | `127.0.0.1:<free port>` (same-origin loopback) | `127.0.0.1:<free port>` + one-time `?token=` |
 | dsh patches | 3 (HMR off · native picker off · welcome notice off) | 13 (flock & hardlink fallbacks · `ctx.fs` remove / writeBytes / chmod · extra writable roots · attachment fsync · rebrand) | 0 (profile/bundle + seam plugins + audited shims) | 0 (profile/bundle + seam plugins + materialize-time patches + audited shims) |
-| Status | v0.2.1 — packaging works; tray / notifications / clipboard / window state | v0.2.1 — built (HAP 0.2.1/1009, dsh rc.5); on-device re-verification pending | v0.2.1 — built (HAP 0.2.1/201, dsh rc.5); device-verified on HarmonyOS 6.1.0.135 (API 24) | v0.2.1 — built (APK 0.2.1/201, dsh rc.5); real-device verified 2026-11-02 |
+| Status | v0.2.2 — packaging works; tray / notifications / clipboard / window state | v0.2.2 — built (HAP 0.2.2/1100, dsh rc.1); on-device re-verification pending | v0.2.2 — built (HAP 0.2.2/202, dsh rc.1); 0.2.1 device-verified on HarmonyOS 6.1.0.135 (API 24) | v0.2.2 — built (APK 0.2.2/202, dsh rc.1); 0.2.2 on-device verification in progress |
 
 ## Capability matrix
 
@@ -158,7 +158,7 @@ against each edition's source code. The full 42-row, source-anchored matrix
 
 Notes:
 
-- Android is v0.2.1: real-device verified 2026-11-02 (functional + end-side capability self-check 13/14); a few 🟢 cells (e.g. market E2E) still await closure.
+- Android is v0.2.2: built (0.2.2 on-device verification in progress; 0.2.1 real-device verified 2026-11-02, functional + end-side capability self-check 13/14); a few 🟢 cells (e.g. market E2E) still await closure.
 - workflow/ralph and the terminal panel are unavailable on the ArkWeb/WebView editions (no spawnable Node helper / no node-pty).
 - The Electron on HarmonyOS Edition ships without DeepSeek Harness branding per AppGallery listing compliance.
 
