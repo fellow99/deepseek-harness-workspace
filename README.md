@@ -130,7 +130,7 @@ against each edition's source code. The full 42-row, source-anchored matrix
 | File read / list / write | ✅ | ✅ | ✅ | ✅ |
 | Delete / move / copy / chmod | ✅ | ✅ | ❌ | 🟢 |
 | Shell commands | ✅ | ✅ | ⚠️ | 🟢 |
-| PTY / terminal panel | ✅ | ❌ | ❌ | ❌ |
+| PTY / terminal panel | ✅ | ❌ | ❌ | ✅ |
 | Terminal commands (usable CLI set) | ✅ (full host-OS CLI: bash/zsh/PowerShell, git/curl/python/…) | 🟢 (resident mksh + toybox set) | ⚠️ (exec in tree, EACCES pending) | 🟢 (resident mksh + bundled CLI git/node/npm/pnpm/python/pip/uv + built-in toybox/awk/curl/pm/getprop/logcat) |
 | Search & glob (ripgrep) | ✅ | ✅ | ❌ | ✅ |
 | web_search / web_fetch | ✅ | ✅ | ⚠️ | ✅ |
@@ -159,7 +159,7 @@ against each edition's source code. The full 42-row, source-anchored matrix
 Notes:
 
 - Android is v0.2.2: built (0.2.2 on-device verification in progress; 0.2.1 real-device verified 2026-11-02, functional + end-side capability self-check 13/14); a few 🟢 cells (e.g. market E2E) still await closure.
-- workflow/ralph and the terminal panel are unavailable on the ArkWeb/WebView editions (no spawnable Node helper / no node-pty).
+- workflow/ralph is unavailable on the HarmonyOS ArkWeb and Android editions (no spawnable Node helper). The PTY terminal panel is unavailable on the two HarmonyOS editions (Electron-on-HarmonyOS: no node-pty; HarmonyOS ArkWeb: no terminal backend).
 - The Electron on HarmonyOS Edition ships without DeepSeek Harness branding per AppGallery listing compliance.
 
 ## Specifications

@@ -127,7 +127,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 | 读文件 / 列目录 / 写文件 | ✅ | ✅ | ✅ | ✅ |
 | 删除 / 移动 / 复制 / chmod | ✅ | ✅ | ❌ | 🟢 |
 | Shell 命令执行 | ✅ | ✅ | ⚠️ | 🟢 |
-| PTY / 终端面板 | ✅ | ❌ | ❌ | ❌ |
+| PTY / 终端面板 | ✅ | ❌ | ❌ | ✅ |
 | 终端命令（可用命令集） | ✅ 全功能系统环境（bash/zsh/PowerShell、git/curl/python/…） | 🟢 常驻 mksh + toybox 命令集（[toybox命令清单](../dsh-desktop-hos/docs/toybox命令清单.md)） | ⚠️ 命令执行在册、EACCES 待修 | 🟢 常驻 mksh + 预置 CLI（git/node/npm/pnpm/python/pip/uv）+ 系统内置（toybox/awk/curl/pm/getprop/logcat），详见[安卓常规终端命令](../dsh-desktop-android/docs/安卓常规终端命令.md) |
 | 内容搜索与 glob（ripgrep） | ✅ | ✅ | ❌ | ✅ |
 | web_search / web_fetch | ✅ | ✅ | ⚠️ | ✅ |
@@ -156,7 +156,7 @@ deepseek-harness-workspace/            # 本仓库 —— submodule 容器
 备注：
 
 - Android 当前为 v0.2.2：已构建（0.2.2 真机验证进行中；0.2.1 已于 2026-11-02 真机验证，功能 + 端侧环境能力自检 13/14）；个别 🟢（如市场 E2E）仍待闭环。
-- ArkWeb/WebView edition 不提供 workflow/ralph 与终端面板（无可 spawn 的 Node 辅助进程 / 无 node-pty）。
+- workflow/ralph 在鸿蒙 ArkWeb 与 Android 版不可用（无可 spawn 的 Node 辅助进程）。PTY 终端面板在两个鸿蒙版不可用（Electron on HarmonyOS：无 node-pty；HarmonyOS ArkWeb：无终端后端）；Android 版已提供（111，node-pty:26.13.0）。
 - Electron on HarmonyOS Edition 因 AppGallery 上架合规要求不带 DeepSeek Harness 品牌标识。
 
 ## 规范文档
